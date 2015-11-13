@@ -1,0 +1,4 @@
+Reqiurment:
+ (1) Install Eclipse
+ (2) Install Marven plugin for Eclipse if needed
+ (3) Have a basic understanding of Marven.
