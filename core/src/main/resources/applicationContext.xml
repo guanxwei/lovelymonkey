@@ -15,12 +15,7 @@
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-4.2.xsd
             http://www.springframework.org/schema/jee
-            http://www.springframework.org/schema/jee/spring-jee-4.2.xsd">
-
-
-    <!-- core model definition file -->
-    <import resource="spring-configuration/core.xml"/>
-
+            http://www.springframework.org/schema/jee/spring-jee-4.2.xsd">    
     <!-- 打开spring的annotation的支持 -->
     <context:annotation-config />
     <!-- 设定spring去那些包中找annotation -->

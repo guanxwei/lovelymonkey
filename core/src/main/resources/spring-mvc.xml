@@ -9,14 +9,23 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 http://www.springframework.org/schema/mvc 
 http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd" >
 
+	<!-- Spring为我们提供了一种极为方便注册这些BeanPostProcessor的方式，
+		即使用<context:annotation- config/>隐式地向 Spring容器注册
+		AutowiredAnnotationBeanPostProcessor、
+		RequiredAnnotationBeanPostProcessor、
+		CommonAnnotationBeanPostProcessor以及
+		PersistenceAnnotationBeanPostProcessor这4个BeanPostProcessor -->
+    <context:annotation-config />
     
     <!-- <mvc:annotation-driven /> 是一种简写形式,
     	会自动注册DefaultAnnotationHandlerMapping与
     	AnnotationMethodHandlerAdapter 两个bean,
     	是spring MVC为@Controllers分发请求所必须的 -->
 	<mvc:annotation-driven />
-	<context:component-scan base-package="com.lovelymonkey.core.controller" />
-
+	<context:component-scan base-package="com.dynamic.web" />
+	
+	<!--使Spring支持自动检测组件，如注解的Controller -->
+	<context:component-scan base-package="com.dynamicform.web.Activity" />
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/" />
