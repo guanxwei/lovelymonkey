@@ -27,7 +27,7 @@ public class LoginAndRegisterController {
     private LoginAndRegisterService loginAndRegisterService;
 
     /**
-     * 用户登陆时，以ajax的形式提交用户的表单，当用户名和密码不匹配时直接在登陆页面提示用户，如果用户名和密码匹配则前端再进行页面呃跳转
+     * 
      */
     @RequestMapping(value="/doLogin.htm", method={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody

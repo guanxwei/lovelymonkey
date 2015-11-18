@@ -1,39 +1,48 @@
 package com.lovelymonkey.core.dao;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
-public abstract class BaseDao {
-
-    @Autowired
-    private SessionFactory sessionFactory;
-    
-    protected Session getCurrentThreadSession() {
-        return this.sessionFactory.getCurrentSession();
-    }
-
-    /**
-     * 
-     * @param queryString query string used to query the entity we want
-     * @param ID object ID uniquely represents an object entity
-     * @return
-     */
-    protected abstract Object getObjectByID(String ID) ;
+public interface BaseDao<T> {
 
     /**
      * Common method that is used to update an object of any kind.
      * @param o Object represents any kind of object that need to be updated.
      */
-    public void updateOrSaveEntity(Object o) {
-        getCurrentThreadSession().saveOrUpdate(o);
-    }
+    public void updateOrSaveEntity(final T t);
 
     /**
      * Common method that is used to delete an object of any kind
      * @param o Object represents any kind of object that need to be updated.
      */
-    public void daleteEntity(Object o) {
-        getCurrentThreadSession().delete(o);
-    }
+    public void daleteEntity(final T t);
+    
+    /**
+     * Common method that is used to get an object by class and id.
+     * @param ID object ID uniquely represents an object entity
+     * @return
+     */
+    public T getEntityByID(final Class<T> clazz, final String ID);
+
+    /**
+     * Common method that is used to query a list by condition string.
+     * @param hql
+     * @return
+     */
+    public  List<T> list(final String hql);
+
+    /**
+     * Common method that is used to return the count fulfill the query string.
+     * @param hql Query string
+     * @return
+     */
+    public int count(final String hql);
+
+    /**
+     * Common method that is used to get the list of entity, which locates from in range [(pageIndex-1)*pageSize,pageIndex*pageSize-1]
+     * @param pageIndex
+     * @param pageSize
+     * @param clazz
+     * @return
+     */
+    public List<T> getListByPageIndex(final int pageIndex, final int pageSize, Class<T> clazz);
 }

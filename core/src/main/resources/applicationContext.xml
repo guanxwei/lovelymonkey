@@ -72,7 +72,7 @@
                 <prop key="hibernate.order_updates">true</prop>
                 <!-- 如果开启, Hibernate将收集有助于性能调节的统计数据.取值true|false -->
                 <prop key="hibernate.generate_statistics">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
             </props>
         </property>
     </bean>
@@ -100,7 +100,7 @@
         <!-- 以下的事务是声明在dao中的，但是通常都会在service来处理多个业务对象逻辑的关系，注入删除，更新等，此时如果在执行了一个步骤之后抛出异常
                就会导致数据不完整，所以事务不应该在dao层处理，而应在service，这也是spring所提供的一个非常方便的工具，声明式事务-->
         <aop:pointcut id="interceptorPointCuts"
-            expression="execution(* com.dynamicform.web.service.*.*(..))"/> 
+            expression="execution(* com.lovelymonkey.core.service.*.*(..))"/> 
         <!-- 通过advisor来确定具体要加入事务控制的方法 -->
         <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts"/>
     </aop:config>
