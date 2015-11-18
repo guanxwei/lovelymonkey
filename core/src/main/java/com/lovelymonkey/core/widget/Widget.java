@@ -10,8 +10,10 @@ import lombok.Setter;
  */
 public class Widget {
 
+    @Getter
     private static final String WIDGET_VERSION = "widget:1.0";
 
+    @Getter
     private static final String WIDGET_NAME = "BASE_WIDGET";
 
     @Getter @Setter
