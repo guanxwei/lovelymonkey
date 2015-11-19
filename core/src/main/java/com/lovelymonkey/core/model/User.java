@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="user")
+@Table(name="model_user")
 public class User {
     @Id
     @GeneratedValue(generator = "system-uuid")   
