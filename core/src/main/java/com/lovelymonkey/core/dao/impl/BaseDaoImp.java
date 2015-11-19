@@ -18,7 +18,7 @@ public class BaseDaoImp<T> implements BaseDao<T>{
     }
 
     /**
-     * Common method that is used to update an object of any kind.
+     * Common method realization that is used to update an object of any kind.
      * @param <T>
      * @param o Object represents any kind of object that need to be updated.
      */
@@ -27,7 +27,7 @@ public class BaseDaoImp<T> implements BaseDao<T>{
     }
 
     /**
-     * Common method that is used to delete an object of any kind
+     * Common method realization that is used to delete an object of any kind
      * @param o Object represents any kind of object that need to be updated.
      */
     public void daleteEntity(final T t) {
@@ -35,7 +35,7 @@ public class BaseDaoImp<T> implements BaseDao<T>{
     }
     
     /**
-     * Common method that is used to get an object by class and id.
+     * Common method realization that is used to get an object by class and id.
      * @param ID object ID uniquely represents an object entity
      * @return
      */
@@ -45,24 +45,46 @@ public class BaseDaoImp<T> implements BaseDao<T>{
     }
 
     /**
-     * Common method that is used to query a list by condition string.
+     * Common method realization that is used to query a list by condition string.
      * @param hql
      * @return
      */
     @SuppressWarnings("unchecked")
-    public  List<T> list(String hql) {
+    public  List<T> list(final String hql, final String ...params) {
         Query query = getCurrentThreadSession().createQuery(hql);
+        int count = 0;
+        for (String param : params) {
+            query.setString(count++, param);
+        }
         return query.list();
     }
 
-    public int count(String hql) {
+    /**
+     * Common method realization that is used to query the number of objects, which match the request.
+     */
+    public int count(final String hql, final String ...params) {
         // TODO Auto-generated method stub
-        return 0;
+        Query query = getCurrentThreadSession().createQuery(hql);
+        int count = 0;
+        for (String param : params) {
+            query.setString(count++, param);
+        }
+        return (int) query.uniqueResult();
     }
 
-    public List<T> getListByPageIndex(int pageIndex, int pageSize,
-            Class<T> clazz) {
+    /**
+     * Common method realization that is used to get paging data,  which locates from in range [(pageIndex-1)*pageSize,pageIndex*pageSize-1].
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> getListByPageIndex(int pageIndex, int pageSize, final String hql, final String ...params) {
         // TODO Auto-generated method stub
-        return null;
+        Query query = getCurrentThreadSession().createQuery(hql);
+        int count = 0;
+        for (String param : params) {
+            query.setString(count++, param);
+        }
+        query.setFirstResult((pageSize-1)*pageSize);
+        query.setMaxResults(pageSize);
+        return query.list();
     }
 }

@@ -4,7 +4,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.lovelymonkey.core.dao.UserDao;
-import com.lovelymonkey.core.dao.impl.UserDaoImp;
 import com.lovelymonkey.core.model.User;
 
 @Slf4j

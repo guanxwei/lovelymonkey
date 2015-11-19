@@ -28,21 +28,21 @@ public interface BaseDao<T> {
      * @param hql
      * @return
      */
-    public  List<T> list(final String hql);
+    public  List<T> list(final String hql, final String ...params);
 
     /**
      * Common method that is used to return the count fulfill the query string.
      * @param hql Query string
      * @return
      */
-    public int count(final String hql);
+    public int count(final String hql, final String ...params);
 
     /**
-     * Common method that is used to get the list of entity, which locates from in range [(pageIndex-1)*pageSize,pageIndex*pageSize-1]
+     * Common method that is used to get the paging data, which locates from in range [(pageIndex-1)*pageSize,pageIndex*pageSize-1]
      * @param pageIndex
      * @param pageSize
      * @param clazz
      * @return
      */
-    public List<T> getListByPageIndex(final int pageIndex, final int pageSize, Class<T> clazz);
+    public List<T> getListByPageIndex(final int pageIndex, final int pageSize, final String hql, final String ...params);
 }
