@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.lovelymonkey.core.dao.UserDao;
 import com.lovelymonkey.core.model.User;
+import com.lovelymonkey.core.utils.SQLQueryConstant;
 
 @Slf4j
 public class LoginAndRegisterService {
@@ -13,11 +14,12 @@ public class LoginAndRegisterService {
     @Setter
     private UserDao userDaoImp;
 
-    public User getUserByUserNameAndPSD(final String userName, final String PSD) {
+    public boolean isUserExist(User u) {
         try{
-            return (User) userDaoImp.getUserByUserNameAndPSD(userName, PSD);
+            User real = (User) userDaoImp.getUserByUserNameAndPSD(u.getUserName(), u.getPassWord());
+            return real != null;
         } catch (Exception e) {
-            log.error(String.format("Failed to get the User info for username: [%]", userName));
+            log.error(String.format("Failed to get the User info for username: [%]", u.getUserName()));
             throw new RuntimeException(e);
         }
     }
@@ -32,11 +34,12 @@ public class LoginAndRegisterService {
         }
     }
 
-    public boolean isUserNameUsed(final String hql) {
+    public boolean isUserNameUsed(final String userName) {
         try {
-            return userDaoImp.count(hql) == 0 ? true:false;
+            int count = userDaoImp.count(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_USERNAME, userName);
+            return count == 0 ? false:true;
         } catch (Exception e) {
-            log.error(String.format("Failed to query userinfo for query string: [%]", hql));
+            log.error(String.format("Failed to query userinfo for username: [%]", userName));
             throw new RuntimeException(e);
         }
     }

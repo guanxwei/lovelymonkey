@@ -37,15 +37,15 @@ public class LoginAndRegisterController {
         log.info(String.format("User: [%s] login system at time [%s]",
                 u.getUserName(), now));
 
-        User real = loginAndRegisterService.getUserByUserNameAndPSD(u.getUserName(), u.getPassWord());
+        boolean isUserExist = loginAndRegisterService.isUserExist(u);
 
-        if (real == null) {
+        if (isUserExist) {
+            /* The User info provided by login matches record in our storage. */
+            httpSession.setAttribute(RequestHandleConstant.LoginStatus.CURRENT_USER, u);
+        } else {
             /* The User provide wrong userName or password. */
             httpSession.setAttribute(RequestHandleConstant.LoginStatus.LOGIN_FAIL_TIME, 1);
             return RequestHandleConstant.LoginStatus.LOGIN_SYSTEM_FAILED;
-        } else {
-            /* The User info provided by login matches record in our storage. */
-            httpSession.setAttribute(RequestHandleConstant.LoginStatus.CURRENT_USER, real);
         }
 
         return RequestHandleConstant.LoginStatus.LOGIN_SYSTEM_SUCCESS;
