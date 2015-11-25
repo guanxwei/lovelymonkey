@@ -17,7 +17,10 @@
             http://www.springframework.org/schema/jee
             http://www.springframework.org/schema/jee/spring-jee-4.2.xsd">
 
-    <bean id="userDaoImp" class="com.lovelymonkey.core.dao.impl.UserDaoImp">
-    
+    <bean id="userDaoImp" class="com.lovelymonkey.core.dao.impl.UserDaoImp">    
+    </bean>
+    <bean id="loginAndRegisterService" class="com.lovelymonkey.core.service.LoginAndRegisterService">
+		<property name="userDaoImp" ref="userDaoImp">
+		</property>   
     </bean>
 </beans>

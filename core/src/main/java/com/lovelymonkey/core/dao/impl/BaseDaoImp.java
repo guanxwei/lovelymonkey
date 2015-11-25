@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.lovelymonkey.core.dao.BaseDao;
 
 public class BaseDaoImp<T> implements BaseDao<T>{
+   
     @Autowired
     private SessionFactory sessionFactory;
     
@@ -69,7 +70,7 @@ public class BaseDaoImp<T> implements BaseDao<T>{
         for (String param : params) {
             query.setString(count++, param);
         }
-        return (int) query.uniqueResult();
+        return query.uniqueResult() == null ? 0:1;
     }
 
     /**

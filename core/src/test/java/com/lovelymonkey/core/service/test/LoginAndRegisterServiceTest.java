@@ -3,14 +3,12 @@ package com.lovelymonkey.core.service.test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.lovelymonkey.core.dao.UserDao;
-import com.lovelymonkey.core.dao.impl.UserDaoImp;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
 import com.lovelymonkey.core.utils.SQLQueryConstant;

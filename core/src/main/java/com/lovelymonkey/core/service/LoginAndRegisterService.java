@@ -1,5 +1,6 @@
 package com.lovelymonkey.core.service;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,7 +12,7 @@ import com.lovelymonkey.core.utils.SQLQueryConstant;
 public class LoginAndRegisterService {
 
     @SuppressWarnings("rawtypes")
-    @Setter
+    @Setter @Getter
     private UserDao userDaoImp;
 
     public boolean isUserExist(User u) {
@@ -39,7 +40,7 @@ public class LoginAndRegisterService {
             int count = userDaoImp.count(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_USERNAME, userName);
             return count == 0 ? false:true;
         } catch (Exception e) {
-            log.error(String.format("Failed to query userinfo for username: [%]", userName));
+            log.error(String.format("Failed to query userinfo for username: [%s]", userName));
             throw new RuntimeException(e);
         }
     }

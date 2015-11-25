@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,12 +19,14 @@ import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
 import com.lovelymonkey.core.utils.RequestHandleConstant;
 
+
+
 @Controller
 @RequestMapping("/user")
 @Slf4j
 public class LoginAndRegisterController {
 
-    @Setter
+    @Autowired @Setter
     private LoginAndRegisterService loginAndRegisterService;
 
     /**

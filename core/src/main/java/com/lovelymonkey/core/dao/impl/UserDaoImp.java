@@ -7,6 +7,7 @@ import com.lovelymonkey.core.dao.UserDao;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.utils.SQLQueryConstant;
 
+
 @SuppressWarnings("hiding")
 public class UserDaoImp<User> extends BaseDaoImp<User> implements UserDao<User>{
 
