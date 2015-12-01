@@ -131,6 +131,9 @@
       <scope>compile</scope>
     </dependency>
   </dependencies>
+  <properties>  
+      <checkstyle.config.location>checkstyle_config.xml</checkstyle.config.location>  
+  </properties>  
   <build>
     <finalName>core</finalName>
     <plugins>
@@ -170,6 +173,60 @@
         </requestLog>
       </configuration>
     </plugin>
+         <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-checkstyle-plugin</artifactId>
+       <version>2.17</version>
+       <executions>
+         <execution>
+           <id>validate</id>
+           <phase>validate</phase>
+           <configuration>
+             <configLocation>checkstyle_config.xml</configLocation>
+             <encoding>UTF-8</encoding>
+             <consoleOutput>true</consoleOutput>
+             <failsOnError>true</failsOnError>
+             <linkXRef>false</linkXRef>
+           </configuration>
+           <goals>
+             <goal>check</goal>
+           </goals>
+         </execution>
+       </executions>
+     </plugin>
     </plugins>
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>
+    									org.apache.maven.plugins
+    								</groupId>
+    								<artifactId>
+    									maven-checkstyle-plugin
+    								</artifactId>
+    								<versionRange>[2.17,)</versionRange>
+    								<goals>
+    									<goal>check</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
   </build>
 </project>

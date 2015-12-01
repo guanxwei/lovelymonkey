@@ -11,39 +11,38 @@ import org.testng.annotations.Test;
 
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
-import com.lovelymonkey.core.utils.JasonHelper;
 
 public class LoginAndRegisterControllerTest extends TestBase{
-    
-    @Autowired
-    private LoginAndRegisterService service;
 
-    @SuppressWarnings("unchecked")
+    @Autowired
+    private LoginAndRegisterService loginAndRegisterService;
+
+    private String USER_NAME_USED = "used";
+    private String USER_NAME_UNUSED = "unused";
+
     @Test(dataProvider="userNameProvider")
     public void testIsUserNameUsed(String userName) throws URISyntaxException, Exception {
-        if (userName.equals("used")) {
+        if (userName.equals(USER_NAME_USED)) {
             //If the useName is "used", then we need to prepare a user info in DB to make sure this user info can be queried.
-            User u = new User();
-            u.setUserName("used");
-            u.setPassWord("pass");
-            service.updateOrSaveUser(u);
-            u = (User) service.getUserDaoImp().getUserByUserNameAndPSD("used", "pass");
-            MvcResult result = getMockMvc().perform(getRequestBuilder("/user/judge.htm?userName=used"))
+            User u = populateUserInDB(userName);
+
+            MvcResult result = getMockMvc().perform(getRequestBuilder("/user/judge.htm?userName=" + USER_NAME_USED))
                     .andDo(MockMvcResultHandlers.print())  
                     .andReturn();
 
-            System.out.println(result.toString());
+            /** Release the new created user info to make the DB can be reused. **/
+            loginAndRegisterService.deleteUser(u);
+
             Assert.assertEquals(result.getResponse().getContentAsString(), "true");
-            service.getUserDaoImp().daleteEntity(u);
         } else{
-            MvcResult result = getMockMvc().perform(getRequestBuilder("/user/judge.htm?userName=unused"))
+            MvcResult result = getMockMvc().perform(getRequestBuilder("/user/judge.htm?userName=" + USER_NAME_UNUSED))
                     .andDo(MockMvcResultHandlers.print())
                     .andReturn();
-            
+
             Assert.assertEquals(result.getResponse().getContentAsString(), "false");
         }
     }
-    
+
     @DataProvider(name="userInfoProvider")
     private Object[][] userInfoProvider() {
         return new Object[][]{
@@ -53,11 +52,26 @@ public class LoginAndRegisterControllerTest extends TestBase{
                 {}
         };
     }
-    
+
     @DataProvider(name="userNameProvider")
     private Object[][] userNameProvider() {
         return new Object[][]{
-                {"unused"}
+                {"used"}
         };
+    }
+
+    /**
+     * 
+     * @param userName The UserName of a specific user.
+     * @return The new created user entity.
+     */
+    private User populateUserInDB(final String userName) {
+        User u = new User();
+        u.setUserName(userName);
+        u.setPassWord("pass");
+        loginAndRegisterService.updateOrSaveUser(u);
+        u = (User) loginAndRegisterService.getUserByUserNameAndPSD(userName, "pass");
+
+        return u;
     }
 }

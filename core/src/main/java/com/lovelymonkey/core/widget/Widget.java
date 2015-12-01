@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 
+ * Base class represents web widget in a html page.
  * @author guanxwei
- * Widget is the base class represents module in a web page, 
+ *
  */
 public class Widget {
 
@@ -17,6 +17,6 @@ public class Widget {
     private static final String WIDGET_NAME = "BASE_WIDGET";
 
     @Getter @Setter
-    private String WIDGET_CONTENT_STRING;
+    private String widgetContent;
 
 }

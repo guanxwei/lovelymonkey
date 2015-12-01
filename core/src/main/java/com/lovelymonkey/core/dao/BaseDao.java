@@ -2,47 +2,57 @@ package com.lovelymonkey.core.dao;
 
 import java.util.List;
 
-public interface BaseDao<T> {
+/**
+ * Interface define the method that is used to query and fetch entities used commonly.
+ * @author guanxwei
+ *
+ * @param <T>
+ */
+ public interface BaseDao<T> {
 
     /**
      * Common method that is used to update an object of any kind.
-     * @param o Object represents any kind of object that need to be updated.
+     * @param t Object represents any kind of object that need to be updated.
      */
-    public void updateOrSaveEntity(final T t);
+     void updateOrSaveEntity(final T t);
 
     /**
-     * Common method that is used to delete an object of any kind
-     * @param o Object represents any kind of object that need to be updated.
+     * Common method that is used to delete an object of any kind.
+     * @param t Object represents any kind of object that need to be updated.
      */
-    public void daleteEntity(final T t);
-    
+     void deleteEntity(final T t);
+
     /**
      * Common method that is used to get an object by class and id.
-     * @param ID object ID uniquely represents an object entity
-     * @return
+     * @param entityID object ID uniquely represents an object entity
+     * @param clazz Model class which is mapped to a datadase table.
+     * @return The queried entity.
      */
-    public T getEntityByID(final Class<T> clazz, final String ID);
+     T getEntityByID(final Class<T> clazz, final String entityID);
 
     /**
      * Common method that is used to query a list by condition string.
-     * @param hql
-     * @return
+     * @param hql SQL query string.
+     * @param params Parameters which will represents the ? in hql.
+     * @return The list of objects fulfill the query string.
      */
-    public  List<T> list(final String hql, final String ...params);
+      List<T> list(final String hql, final String ...params);
 
     /**
      * Common method that is used to return the count fulfill the query string.
-     * @param hql Query string
-     * @return
+     * @param hql Query string.
+     * @param params Parameters which will represents the ? in hql.
+     * @return The number of objects fuifill the query string.
      */
-    public int count(final String hql, final String ...params);
+     int count(final String hql, final String ...params);
 
     /**
-     * Common method that is used to get the paging data, which locates from in range [(pageIndex-1)*pageSize,pageIndex*pageSize-1]
-     * @param pageIndex
-     * @param pageSize
-     * @param clazz
-     * @return
+     * Common method that is used to get the paging data, which locates from in range [(pageIndex-1)*pageSize,pageIndex*pageSize-1].
+     * @param pageIndex The index currently need to be queried.
+     * @param pageSize Page size.
+     * @param hql SQL query string.
+     * @param params Parameters which will represents the ? in hql.
+     * @return he list of objects fulfill the query string.
      */
-    public List<T> getListByPageIndex(final int pageIndex, final int pageSize, final String hql, final String ...params);
+     List<T> getListByPageIndex(final int pageIndex, final int pageSize, final String hql, final String ...params);
 }

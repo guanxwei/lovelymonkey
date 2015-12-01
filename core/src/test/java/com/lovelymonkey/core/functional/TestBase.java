@@ -17,8 +17,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 
 @ContextHierarchy({  
-        @ContextConfiguration(name = "parent", locations = "classpath:applicationContext-test.xml"),  
-        @ContextConfiguration(name = "child", locations = "classpath:spring-mvc.xml")  
+        @ContextConfiguration(name = "parent", locations = "classpath:applicationContext-test.xml"),
+        @ContextConfiguration(name = "child", locations = "classpath:spring-mvc.xml")
 })  
 
 @WebAppConfiguration(value = "src/main/webapp")
@@ -26,7 +26,7 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests{
 
     @Autowired
     private WebApplicationContext context;
-    
+
     @Getter
     private MockMvc mockMvc;
     
@@ -40,13 +40,13 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests{
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
-    
+
     public RequestBuilder postRequestBuilder(String url) {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(url);
         
         return requestBuilder;
     }
-    
+
     public RequestBuilder getRequestBuilder(String url) {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
         

@@ -19,8 +19,11 @@ import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
 import com.lovelymonkey.core.utils.RequestHandleConstant;
 
-
-
+/**
+ * User info management controller.
+ * @author guanxwei
+ *
+ */
 @Controller
 @RequestMapping("/user")
 @Slf4j
@@ -30,9 +33,12 @@ public class LoginAndRegisterController {
     private LoginAndRegisterService loginAndRegisterService;
 
     /**
-     * 
+     * Login method that is used to help user login to our system.
+     * @param u User entity input by customer.
+     * @param httpSession Session maps to a specific user.
+     * @return The correct page that user should visit determined by the input info provided by customer.
      */
-    @RequestMapping(value="/doLogin.htm", method={RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/doLogin.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String doLogin(@RequestParam @NonNull final User u, final HttpSession httpSession) {
         String now = Calendar.getInstance().toString();
@@ -44,26 +50,37 @@ public class LoginAndRegisterController {
 
         if (isUserExist) {
             /* The User info provided by login matches record in our storage. */
-            httpSession.setAttribute(RequestHandleConstant.LoginStatus.CURRENT_USER, u);
+            httpSession.setAttribute(RequestHandleConstant.UserManageStatus.CURRENT_USER, u);
         } else {
             /* The User provide wrong userName or password. */
-            httpSession.setAttribute(RequestHandleConstant.LoginStatus.LOGIN_FAIL_TIME, 1);
-            return RequestHandleConstant.LoginStatus.LOGIN_SYSTEM_FAILED;
+            httpSession.setAttribute(RequestHandleConstant.UserManageStatus.LOGIN_FAIL_TIME, 1);
+            return RequestHandleConstant.UserManageStatus.LOGIN_SYSTEM_FAILED;
         }
 
-        return RequestHandleConstant.LoginStatus.LOGIN_SYSTEM_SUCCESS;
+        return RequestHandleConstant.UserManageStatus.LOGIN_SYSTEM_SUCCESS;
     }
 
-    @RequestMapping(value="/doRegister.htm", method={RequestMethod.POST})
+    /**
+     * Register method that helps customer register account in our system.
+     * @param u User entity input by customer.
+     * @return The correct page that user should visit determined by the input info provided by customer.
+     */
+    @RequestMapping(value = "/doRegister.htm", method = {RequestMethod.POST})
     public String doRegister(@RequestParam @NonNull final User u) {
         log.info(String.format("Risgister user for userinfo [%s]", u.getUserName()));
 
         loginAndRegisterService.updateOrSaveUser(u);
 
-        return RequestHandleConstant.LoginStatus.REGISTER_SYSTEM_SUCCESS;
+        return RequestHandleConstant.UserManageStatus.REGISTER_SYSTEM_SUCCESS;
     }
 
-    @RequestMapping(value="/judge.htm", method={RequestMethod.GET})
+    /**
+     * UserName check method that is used to guarantee the customer input a unique username so that
+     * duplicate username will not happen.
+     * @param userName The username that is typed in by the customer in the front page.
+     * @return The correct page that user should visit determined by the input info provided by customer.
+     */
+    @RequestMapping(value = "/judge.htm", method = {RequestMethod.GET})
     @ResponseBody
     public String isUserNameUsed(@RequestParam @NonNull final String userName) {
         log.info(String.format("Judge if username: [%s] has been used", userName));
