@@ -1,4 +1,4 @@
-package com.lovelymonkey.core.service.test;
+package com.lovelymonkey.core.service;
 
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -57,7 +57,7 @@ public class LoginAndRegisterServiceTest {
             Assert.assertTrue(result);
         }
     }
-    
+
     @DataProvider(name="userInfoDataProvider")
     private Object[][] loginUserProvider() {
         return new Object[][]{
@@ -65,7 +65,7 @@ public class LoginAndRegisterServiceTest {
                 {"exist","password"}
         };
     }
-    
+
     @DataProvider(name="userNameDataProvider")
     private Object[][] userNameProvider() {
         return new Object[][] {

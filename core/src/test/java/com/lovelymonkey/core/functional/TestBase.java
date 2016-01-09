@@ -20,7 +20,6 @@ import org.testng.annotations.BeforeSuite;
         @ContextConfiguration(name = "parent", locations = "classpath:applicationContext-test.xml"),
         @ContextConfiguration(name = "child", locations = "classpath:spring-mvc.xml")
 })  
-
 @WebAppConfiguration(value = "src/main/webapp")
 public abstract class TestBase extends AbstractTestNGSpringContextTests{
 
@@ -29,7 +28,7 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests{
 
     @Getter
     private MockMvc mockMvc;
-    
+
     @BeforeSuite(alwaysRun=true)
     public void init() {
         MockitoAnnotations.initMocks(this);
@@ -41,15 +40,15 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests{
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-    public RequestBuilder postRequestBuilder(String url) {
+    public RequestBuilder postRequestBuilder(final String url) {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(url);
-        
+
         return requestBuilder;
     }
 
-    public RequestBuilder getRequestBuilder(String url) {
+    public RequestBuilder getRequestBuilder(final String url) {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(url);
-        
+
         return requestBuilder;
     }
 }

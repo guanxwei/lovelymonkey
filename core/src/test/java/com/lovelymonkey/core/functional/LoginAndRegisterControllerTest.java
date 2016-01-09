@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -11,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
+import com.lovelymonkey.core.utils.ControllerConstant;
 
 public class LoginAndRegisterControllerTest extends TestBase{
 
@@ -41,6 +43,24 @@ public class LoginAndRegisterControllerTest extends TestBase{
 
             Assert.assertEquals(result.getResponse().getContentAsString(), "false");
         }
+    }
+
+    @Test
+    public void testRegisterUser() throws Exception {
+        String url = "/user/doRegister.htm";
+        MockHttpServletRequestBuilder builder = (MockHttpServletRequestBuilder) postRequestBuilder(url);
+        builder.param("userName", "guanxwei").param("passWord", "123456");
+        MvcResult result = getMockMvc().perform(builder)
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        User currentUser = (User) result.getRequest().getSession().getAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER);
+        Assert.assertNotNull(currentUser);
+        Assert.assertEquals(currentUser.getUserName(), "guanxwei");
+        Assert.assertEquals(currentUser.getPassWord(), "123456");
+        User u = loginAndRegisterService.getUserByUserNameAndPSD("guanxwei", "123456");
+        Assert.assertNotNull(u);
+        loginAndRegisterService.deleteUser(u);
     }
 
     @DataProvider(name="userInfoProvider")

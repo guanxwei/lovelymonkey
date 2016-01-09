@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
+import com.lovelymonkey.core.utils.ControllerConstant;
 import com.lovelymonkey.core.utils.RequestHandleConstant;
 
 /**
@@ -63,13 +64,17 @@ public class LoginAndRegisterController {
     /**
      * Register method that helps customer register account in our system.
      * @param u User entity input by customer.
+     * @param session HttpSession used to store customer specific info.
      * @return The correct page that user should visit determined by the input info provided by customer.
      */
     @RequestMapping(value = "/doRegister.htm", method = {RequestMethod.POST})
-    public String doRegister(@RequestParam @NonNull final User u) {
+    public String doRegister(final User u, final HttpSession session) {
         log.info(String.format("Risgister user for userinfo [%s]", u.getUserName()));
 
+        System.out.println("helloworld" + u);
         loginAndRegisterService.updateOrSaveUser(u);
+        session.setAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER,
+                loginAndRegisterService.getUserByUserNameAndPSD(u.getUserName(), u.getPassWord()));
 
         return RequestHandleConstant.UserManageStatus.REGISTER_SYSTEM_SUCCESS;
     }
