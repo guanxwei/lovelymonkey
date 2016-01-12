@@ -9,7 +9,7 @@ package com.lovelymonkey.core.utils;
 public final class SQLQueryConstant {
 
     /**
-     * Class that is used to store the quety string about user info.
+     * Class that is used to store the query string about user info.
      * @author guanxwei
      *
      */
@@ -32,4 +32,16 @@ public final class SQLQueryConstant {
 
     }
 
+    /**
+     * Class that is used to store the query string about menu info.
+     * @author guanxwei
+     *
+     */
+    public static class MenuInfoQuery {
+
+        /**
+         * Query string that is used to query the menu list by user level.
+         */
+        public static final String QUERY_MENE_BY_USER_LEVEL = "from Menu m where u.level <= ?";
+    }
 }

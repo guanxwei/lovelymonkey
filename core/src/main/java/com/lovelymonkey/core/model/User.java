@@ -43,4 +43,7 @@ public class User implements Serializable {
 
     @Column(name = "username", unique = true, nullable = false, length = 30)
     private String userName;
+
+    @Column(name = "level")
+    private int level;
 }
