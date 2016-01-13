@@ -12,5 +12,9 @@ public abstract class Widget {
     @Getter
     private static final String VERSION = "widget:1.0";
 
+    protected abstract String getGroupName();
+
     protected abstract String getName();
+
+    protected abstract String getSymbol();
 }
