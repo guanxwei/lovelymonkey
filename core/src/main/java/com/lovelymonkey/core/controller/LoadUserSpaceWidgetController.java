@@ -20,7 +20,7 @@ import com.lovelymonkey.core.utils.JasonHelper;
 @Controller
 @RequestMapping(value = "/menu")
 @Slf4j
-public class LoadUserSpaceMenuController {
+public class LoadUserSpaceWidgetController {
 
     @Autowired @Setter
     private LoadUserSpaceMenuService loadUserSpaceMenuService;

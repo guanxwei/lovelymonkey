@@ -2,8 +2,6 @@ package com.lovelymonkey.core.service;
 
 import java.util.List;
 
-import org.hibernate.annotations.NotFound;
-
 import com.lovelymonkey.core.dao.BaseDao;
 import com.lovelymonkey.core.model.Menu;
 import com.lovelymonkey.core.model.User;
@@ -36,4 +34,5 @@ public class LoadUserSpaceMenuService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
 }
