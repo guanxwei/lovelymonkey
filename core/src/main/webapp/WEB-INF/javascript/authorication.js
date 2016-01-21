@@ -10,7 +10,7 @@
     var userName = $(".userName").val();
     var pass = $(".passWord").val();
     $.ajax({
-        url: '../user/doLogin.html,
+        url: '../user/doLogin.html',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -41,6 +41,7 @@
         if (response == "true") {
             //通过验证，当前用户输入的用户名可以使用
         } else {
+            //用户名没有通过验证，当前用户名已经被别人使用
             $(".userNameErrorInfo").removeClass("display_error");
             $(".userNameErrorInfo").addClass("display_error");
         }

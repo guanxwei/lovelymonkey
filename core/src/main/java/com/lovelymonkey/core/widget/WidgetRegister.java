@@ -19,7 +19,7 @@ public class WidgetRegister {
 
     /**
      * Register a widget by its name. Every existed widget will be overwritten.
-     * @param widget
+     * @param widget widget.
      */
     public void register(@NonNull final Widget widget) {
         Widget exists = widgets.get(widget.getSymbol());
@@ -31,16 +31,16 @@ public class WidgetRegister {
 
     /**
      * Get a widget from register by name.
-     * @param name
-     * @return
+     * @param name name.
+     * @return widget name.
      */
     public Widget getWidget(@NonNull final String name) {
         return widgets.get(name);
     }
 
     /**
-     * Return all the widgets registerd in the register.
-     * @return
+     * Return all the widgets registered in the register.
+     * @return widget list.
      */
     public List<Widget> getAll() {
         return (List<Widget>) widgets.values();

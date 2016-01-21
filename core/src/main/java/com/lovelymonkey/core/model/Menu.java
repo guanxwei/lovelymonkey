@@ -8,6 +8,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
 
+/**
+ * Backend management system menu.
+ * @author guanxwei
+ *
+ */
 @Data
 public class Menu {
 
@@ -22,4 +27,7 @@ public class Menu {
 
     @Column(name = "level")
     private int level;
+
+    @Column(name = "parentID")
+    private String parentID;
 }

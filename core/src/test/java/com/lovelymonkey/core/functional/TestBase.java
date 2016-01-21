@@ -19,7 +19,7 @@ import org.testng.annotations.BeforeSuite;
 @ContextHierarchy({  
         @ContextConfiguration(name = "parent", locations = "classpath:applicationContext-test.xml"),
         @ContextConfiguration(name = "child", locations = "classpath:spring-mvc.xml")
-})  
+})
 @WebAppConfiguration(value = "src/main/webapp")
 public abstract class TestBase extends AbstractTestNGSpringContextTests{
 

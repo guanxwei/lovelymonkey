@@ -1,10 +1,10 @@
 package com.lovelymonkey.core.dao.impl;
 
-import org.hibernate.Query;
-
 import com.lovelymonkey.core.dao.UserDao;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.utils.SQLQueryConstant;
+
+import org.hibernate.Query;
 
 /**
  * Provide User info management specific Dao functions.
@@ -29,6 +29,18 @@ public class UserDaoImp<User> extends BaseDaoImp<User> implements UserDao<User> 
         query.setString(1, accountPSD);
 
         return  (User) query.uniqueResult();
+    }
+
+    /**
+     * User info management specific function, which is used to delete the user by user name.
+     * @param userName user name.
+     */
+    @Override
+    public void deleteUserByUserName(final String userName) {
+        Query query = getCurrentThreadSession().createQuery(SQLQueryConstant.UserInfoQuery.DELETE_USER_BY_USERNAME);
+        query.setString(0, userName);
+
+        query.executeUpdate();
     }
 
 }

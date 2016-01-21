@@ -23,7 +23,7 @@
         <property name="userDaoImp" ref="userDaoImp">
         </property>   
     </bean>
-    <bean id="loadUserSpaceMenuService" class="com.lovelymonkey.core.service.LloadUserSpaceMenuService">
+    <bean id="loadUserSpaceMenuService" class="com.lovelymonkey.core.service.LoadUserSpaceMenuService">
         <property name="baseDao" ref="baseDaoImp">
         </property>   
     </bean>

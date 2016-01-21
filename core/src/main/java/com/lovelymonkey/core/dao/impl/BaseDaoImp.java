@@ -1,13 +1,13 @@
 package com.lovelymonkey.core.dao.impl;
 
+import com.lovelymonkey.core.dao.BaseDao;
+
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.lovelymonkey.core.dao.BaseDao;
 
 /**
  * Implements the method defined in class BaseDao<T>.
@@ -60,6 +60,9 @@ public class BaseDaoImp<T> implements BaseDao<T> {
     @SuppressWarnings("unchecked")
     public  List<T> list(final String hql, final String ...params) {
         Query query = getCurrentThreadSession().createQuery(hql);
+        if (params == null || params.length == 0) {
+            return query.list();
+        }
         int count = 0;
         for (String param : params) {
             query.setString(count++, param);

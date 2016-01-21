@@ -13,7 +13,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * LoadUserSpaceMenuService
+ * LoadUserSpaceMenuService.
  * @author guanxwei
  *
  */
@@ -23,13 +23,18 @@ public class LoadUserSpaceMenuService {
     @Setter @Getter
     private BaseDao<Menu> baseDao;
 
+    /**
+     * Get menus by user level.
+     * @param user login user.
+     * @return menu list.
+     */
     public List<Menu> getMenuListByUserLevel(@NonNull final User user) {
-        log.info("Fetch menu list for user [{}], user's level is [{}]",user.getUserName(), user.getLevel());
+        log.info("Fetch menu list for user [{}], user's level is [{}]", user.getUserName(), user.getLevel());
 
         try {
             return baseDao.list(SQLQueryConstant.MenuInfoQuery.QUERY_MENE_BY_USER_LEVEL,
                     String.valueOf(user.getLevel()));
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("Failed to fetch menu list for user [{}]", user.getUserName());
             throw new RuntimeException(e.getMessage());
         }

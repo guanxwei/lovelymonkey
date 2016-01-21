@@ -1,7 +1,5 @@
 package com.lovelymonkey.core.functional;
 
-import java.net.URISyntaxException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -10,9 +8,11 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.lovelymonkey.core.builder.UserBuilder;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
 import com.lovelymonkey.core.utils.ControllerConstant;
+import com.lovelymonkey.core.utils.RequestHandleConstant;
 
 public class LoginAndRegisterControllerTest extends TestBase{
 
@@ -22,8 +22,11 @@ public class LoginAndRegisterControllerTest extends TestBase{
     private String USER_NAME_USED = "used";
     private String USER_NAME_UNUSED = "unused";
 
+    /**
+     * Test if the specific user name has been used.
+     */
     @Test(dataProvider="userNameProvider")
-    public void testIsUserNameUsed(String userName) throws URISyntaxException, Exception {
+    public void testIsUserNameUsed(String userName) throws Exception {
         if (userName.equals(USER_NAME_USED)) {
             //If the useName is "used", then we need to prepare a user info in DB to make sure this user info can be queried.
             User u = populateUserInDB(userName);
@@ -41,25 +44,49 @@ public class LoginAndRegisterControllerTest extends TestBase{
                     .andDo(MockMvcResultHandlers.print())
                     .andReturn();
 
+            loginAndRegisterService.deleteUserByUserName(USER_NAME_UNUSED);
+
             Assert.assertEquals(result.getResponse().getContentAsString(), "false");
         }
     }
 
+    /**
+     * Test user account register happy case.
+     */
     @Test
     public void testRegisterUser() throws Exception {
         String url = "/user/doRegister.htm";
         MockHttpServletRequestBuilder builder = (MockHttpServletRequestBuilder) postRequestBuilder(url);
-        builder.param("userName", "guanxwei").param("passWord", "123456");
+        builder.param("userName", USER_NAME_UNUSED).param("passWord", "123456");
         MvcResult result = getMockMvc().perform(builder)
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
         User currentUser = (User) result.getRequest().getSession().getAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER);
         Assert.assertNotNull(currentUser);
-        Assert.assertEquals(currentUser.getUserName(), "guanxwei");
+        Assert.assertEquals(currentUser.getUserName(), USER_NAME_UNUSED);
         Assert.assertEquals(currentUser.getPassWord(), "123456");
-        User u = loginAndRegisterService.getUserByUserNameAndPSD("guanxwei", "123456");
+        User u = loginAndRegisterService.getUserByUserNameAndPSD(USER_NAME_UNUSED, "123456");
         Assert.assertNotNull(u);
+        loginAndRegisterService.deleteUser(u);
+    }
+
+    /**
+     * Test user account register unhappy case.
+     */
+    @Test
+    public void testRegisterUserUnHappyCase() throws Exception {
+
+        User u = populateUserInDB(USER_NAME_USED);
+        Assert.assertNotNull(u);
+
+        String url = "/user/doRegister.htm";
+        MockHttpServletRequestBuilder builder = (MockHttpServletRequestBuilder) postRequestBuilder(url);
+        builder.param("userName", USER_NAME_USED).param("passWord", "123456");
+        MvcResult result = getMockMvc().perform(builder)
+                .andReturn();
+
+        Assert.assertEquals(result.getResponse().getContentAsString(), RequestHandleConstant.UserManageStatus.REGISTER_SYSTEM_FAILED);
         loginAndRegisterService.deleteUser(u);
     }
 
@@ -76,7 +103,8 @@ public class LoginAndRegisterControllerTest extends TestBase{
     @DataProvider(name="userNameProvider")
     private Object[][] userNameProvider() {
         return new Object[][]{
-                {"used"}
+                {"used"},
+                {"notused"}
         };
     }
 
@@ -86,12 +114,15 @@ public class LoginAndRegisterControllerTest extends TestBase{
      * @return The new created user entity.
      */
     private User populateUserInDB(final String userName) {
-        User u = new User();
-        u.setUserName(userName);
-        u.setPassWord("pass");
+        User u = UserBuilder.builder()
+                .userName(userName)
+                .passWord("pass")
+                .build();
+
         loginAndRegisterService.updateOrSaveUser(u);
         u = (User) loginAndRegisterService.getUserByUserNameAndPSD(userName, "pass");
 
         return u;
     }
+
 }

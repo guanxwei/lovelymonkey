@@ -186,14 +186,5 @@ Finally, it is worth reading the documentation.
         </module>
         <module name="UpperEll"/>
 
-        <!-- Enforce Import Order -->
-        <module name="ImportOrder">
-            <property name="option" value="top"/> <!-- Static imports are above other imports -->
-            <property name="groups" value="java,javax,lombok,net,org,com"/>
-            <property name="ordered" value="true"/>
-            <property name="separated" value="true"/> <!-- Requires line separator between "groups" -->
-            <property name="sortStaticImportsAlphabetically" value="true"/>
-        </module>
-
     </module>
 </module>

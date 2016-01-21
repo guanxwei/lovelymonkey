@@ -1,5 +1,7 @@
 package com.lovelymonkey.core.service;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -95,4 +97,33 @@ public class LoginAndRegisterService {
         }
     }
 
+    /**
+     * Delete the user by user name.
+     * @param userName user name.
+     */
+    public void deleteUserByUserName(final String userName) {
+        try {
+            userDaoImp.deleteUserByUserName(userName);
+        } catch (Exception e) {
+            log.error(String.format("Failed to delelte user : [%s]", userName));
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Get user list by input query string.
+     * @param queryString query string.
+     * @param params specific parameters.
+     * @return user list.
+     */
+    public List<User> getUserList(final String queryString, final String[] params) {
+        try {
+            @SuppressWarnings("unchecked")
+            List<User> result = userDaoImp.list(queryString, params);
+            return result;
+        } catch (Exception e) {
+            log.error(String.format("Failed to fetch user list for query string : [%s]", queryString));
+            throw new RuntimeException(e);
+        }
+    }
 }

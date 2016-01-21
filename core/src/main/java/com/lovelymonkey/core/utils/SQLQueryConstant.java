@@ -30,6 +30,10 @@ public final class SQLQueryConstant {
          */
         public static final String QUERY_USER_BY_ID = "from User u where u.ID = ?";
 
+        /**
+         * Query string that is used to delete a user by user name.
+         */
+        public static final String DELETE_USER_BY_USERNAME = "delete User u where u.userName = ?";
     }
 
     /**

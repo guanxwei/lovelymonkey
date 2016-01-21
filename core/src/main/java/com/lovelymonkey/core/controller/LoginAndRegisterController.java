@@ -1,6 +1,7 @@
 package com.lovelymonkey.core.controller;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -71,7 +72,20 @@ public class LoginAndRegisterController {
     public String doRegister(final User u, final HttpSession session) {
         log.info(String.format("Risgister user for userinfo [%s]", u.getUserName()));
 
-        System.out.println("helloworld" + u);
+        /* Before registering, we still need to check if the userName has been used for other users. */
+        log.info("Check if the user name [{}] has been used before", u.getUserName());
+        List<User> users = loginAndRegisterService.getUserList("from User where 1 = 1", null);
+        System.out.println("hello world");
+        for (User tempUser : users) {
+            System.out.println(tempUser.getUserName());
+        }
+
+        boolean isUserNameUsed = loginAndRegisterService.isUserNameUsed(u.getUserName());
+        if (isUserNameUsed) {
+            log.info("Tried to register a account by used user name [{}]", u.getUserName());
+            return RequestHandleConstant.UserManageStatus.REGISTER_SYSTEM_FAILED;
+        }
+
         loginAndRegisterService.updateOrSaveUser(u);
         session.setAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER,
                 loginAndRegisterService.getUserByUserNameAndPSD(u.getUserName(), u.getPassWord()));

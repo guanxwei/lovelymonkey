@@ -8,16 +8,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.lovelymonkey.core.dao.UserDao;
+import com.lovelymonkey.core.dao.impl.UserDaoImp;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
 import com.lovelymonkey.core.utils.SQLQueryConstant;
 
 public class LoginAndRegisterServiceTest {
 
-    @Mock private UserDao<User> dao;
+    @Mock private UserDaoImp<User> dao;
     private LoginAndRegisterService service;
-    
+
     @BeforeMethod
     public void before() {
         MockitoAnnotations.initMocks(this);

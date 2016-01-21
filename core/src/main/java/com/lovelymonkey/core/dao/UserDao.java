@@ -16,4 +16,9 @@ public interface UserDao<User> extends BaseDao<User> {
      */
     User getUserByUserNameAndPSD(final String userName, final String accountPSD);
 
+    /**
+     * Method that is used to delete user by user name.
+     * @param userName user name.
+     */
+    void deleteUserByUserName(final String userName);
 }

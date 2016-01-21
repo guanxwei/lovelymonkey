@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Internal object container that will container anything, the plugin system will use it to transfer necessary info
- * in plugin.
+ * Internal object container that will container anything, the plug-in system will use it to transfer necessary info
+ * in plug-in.
  * @author wgx
  *
  */
