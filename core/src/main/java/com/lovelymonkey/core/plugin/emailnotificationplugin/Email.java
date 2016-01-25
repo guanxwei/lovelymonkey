@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class Email {
+    //Currently the system will use the default sender info, managed by the configuration file.
     private Sender sender;
     private Receiver receiver;
     private String subject;

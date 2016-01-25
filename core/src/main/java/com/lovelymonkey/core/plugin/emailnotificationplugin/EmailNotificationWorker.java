@@ -9,7 +9,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import lombok.Setter;
@@ -24,12 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EmailNotificationWorker {
 
-    private static final BlockingQueue<Email> EMAIL_QUEUE = new LinkedBlockingQueue<Email>(100);
     private static final int DEFAULT_WORKERS = 5;
+    private static final BlockingQueue<Email> EMAIL_QUEUE = new LinkedBlockingQueue<Email>(100);
+    private static final Thread[] THREADS = new Thread[DEFAULT_WORKERS];
 
     @Autowired
     @Setter
-    private JavaMailSender realSender;
+    private JavaMailSenderImpl realSender;
 
     /**
      * Default constructor.
@@ -43,10 +44,10 @@ public class EmailNotificationWorker {
      */
     private void enact() {
         for (int i = 0; i < DEFAULT_WORKERS; i++) {
-            Thread t = new Thread(new Worker());
+            THREADS[i] = new Thread(new Worker());
             log.info("Initiate worker thread to prepare to send emails");
-            t.setName("EmailSender" + i);
-            t.start();
+            THREADS[i].setName("EmailSender" + i);
+            THREADS[i].start();
         }
     }
 
@@ -71,15 +72,22 @@ public class EmailNotificationWorker {
             log.info(String.format("Thread: [%s] begins to work", Thread.currentThread().getName()));
 
             while (true) {
-                Email email;
+                Email email = null;
                 try {
                     email = EMAIL_QUEUE.take();
                     if (email == null) {
                         log.error("Something wrong happened, null is not acceptable");
+                        continue;
                     }
-
                     sendEmail(email);
                 } catch (Exception e) {
+                    try {
+                        if (email != null) {
+                            EMAIL_QUEUE.put(email);
+                        }
+                    } catch (InterruptedException e1) {
+                        log.error("Failed to put back the unsent mail [{}] to the queue", email.getSubject());
+                    }
                     log.error(String.format("Error happened when the worker try to take email from the email queue, for detail: [%s] ", e));
                 }
             }
@@ -88,10 +96,16 @@ public class EmailNotificationWorker {
         private void sendEmail(final Email email) throws Exception {
             MimeMessage message = realSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom(new InternetAddress(email.getSender().getSenderAddress()));
+            //Currently we use the default email sender 'realSender'.
+            if (email.getSender() == null) {
+                helper.setFrom(new InternetAddress(realSender.getUsername()));
+            } else {
+                helper.setFrom(new InternetAddress(email.getSender().getSenderAddress()));
+            }
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getReceiver().getReceiverAddress()));
             message.setSubject(email.getSubject());
             message.setSentDate(new Date());
+            helper.setTo(new InternetAddress(email.getReceiver().getReceiverAddress()));
             realSender.send(message);
         }
     }

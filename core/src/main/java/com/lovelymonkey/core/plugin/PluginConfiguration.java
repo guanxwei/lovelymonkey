@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import com.lovelymonkey.core.plugin.emailnotificationplugin.EmailNotificationConstants;
@@ -61,7 +60,7 @@ public class PluginConfiguration {
      * @return JavaMailSender.
      */
     @Bean
-    public JavaMailSender getJavaMailSender() {
+    public JavaMailSenderImpl getJavaMailSender() {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setProtocol(env.getProperty("default_protocol"));
         sender.setDefaultEncoding(EmailNotificationConstants.DEFAULT_ENCODE);
@@ -70,7 +69,9 @@ public class PluginConfiguration {
         sender.setUsername(env.getProperty("username"));
         sender.setPassword(env.getProperty("password"));
         Properties property = new Properties();
-        property.put("mail.smtp.auth", true);
+        property.put("mail.smtp.auth", env.getProperty("mail.smtp.auth"));
+        property.put("mail.smtp.timeout", env.getProperty("mail.smtp.timeout"));
+        property.put("mail.smtp.socketFactory.class", env.getProperty("mail.smtp.socketFactory.class"));
         sender.setJavaMailProperties(property);
         return sender;
     }
