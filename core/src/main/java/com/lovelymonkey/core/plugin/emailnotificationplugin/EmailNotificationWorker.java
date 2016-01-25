@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -80,6 +79,7 @@ public class EmailNotificationWorker {
                         continue;
                     }
                     sendEmail(email);
+                    log.info("Successfully sent email to customer");
                 } catch (Exception e) {
                     try {
                         if (email != null) {
@@ -102,10 +102,10 @@ public class EmailNotificationWorker {
             } else {
                 helper.setFrom(new InternetAddress(email.getSender().getSenderAddress()));
             }
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email.getReceiver().getReceiverAddress()));
-            message.setSubject(email.getSubject());
-            message.setSentDate(new Date());
+            helper.setSubject(email.getSubject());
+            helper.setSentDate(new Date());
             helper.setTo(new InternetAddress(email.getReceiver().getReceiverAddress()));
+            helper.setText(email.getContent(), true);
             realSender.send(message);
         }
     }

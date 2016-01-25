@@ -1,7 +1,5 @@
 package com.lovelymonkey.core.plugin.emailnotificationplugin;
 
-import javax.mail.Multipart;
-
 import lombok.Data;
 
 /**
@@ -15,5 +13,5 @@ public class Email {
     private Sender sender;
     private Receiver receiver;
     private String subject;
-    private Multipart content;
+    private String content;
 }

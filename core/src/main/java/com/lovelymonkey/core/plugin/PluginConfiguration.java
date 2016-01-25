@@ -62,12 +62,12 @@ public class PluginConfiguration {
     @Bean
     public JavaMailSenderImpl getJavaMailSender() {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setProtocol(env.getProperty("default_protocol"));
+        sender.setProtocol(env.getProperty("mail.smtp.default_protocol"));
         sender.setDefaultEncoding(EmailNotificationConstants.DEFAULT_ENCODE);
-        sender.setPort(Integer.valueOf(env.getProperty("port")));
-        sender.setHost(env.getProperty("default_host"));
-        sender.setUsername(env.getProperty("username"));
-        sender.setPassword(env.getProperty("password"));
+        sender.setPort(Integer.valueOf(env.getProperty("mail.smtp.port")));
+        sender.setHost(env.getProperty("mail.smtp.default_host"));
+        sender.setUsername(env.getProperty("mail.smtp.username"));
+        sender.setPassword(env.getProperty("mail.smtp.password"));
         Properties property = new Properties();
         property.put("mail.smtp.auth", env.getProperty("mail.smtp.auth"));
         property.put("mail.smtp.timeout", env.getProperty("mail.smtp.timeout"));
