@@ -32,7 +32,7 @@ public class User implements Serializable {
     @Column(name = "email", length = 30)
     private String email;
 
-    @Column(name = "passworld")
+    @Column(name = "password")
     private String passWord;
 
     @Column(name = "emojipath")

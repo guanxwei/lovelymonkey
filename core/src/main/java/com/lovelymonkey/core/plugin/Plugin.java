@@ -13,7 +13,7 @@ public interface Plugin {
      * @param input Input object contains the information that need to be handled by the plug-in.
      * @return The response output by plug-in.
      */
-    Anything serve(Anything input);
+    Anything serve(final Anything input);
 
     /**
      * Return the symbol name of the plug-in.

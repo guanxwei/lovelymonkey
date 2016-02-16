@@ -28,7 +28,7 @@ public class RequestHandleConstant {
         /**
          * The url user will visit if the customer inout the wrong user info.
          */
-        public static final String LOGIN_SYSTEM_FAILED = "";
+        public static final String LOGIN_SYSTEM_FAILED = "failed";
 
         /**
          * The url user will visit if the customer register in our system successfully.

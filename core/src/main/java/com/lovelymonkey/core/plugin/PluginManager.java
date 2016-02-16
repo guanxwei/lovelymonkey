@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.collect.Lists;
+import com.lovelymonkey.core.service.PluginSystemSpecificService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PluginManager {
 
+    @Autowired
+    private PluginSystemSpecificService storage;
     private final Map<String, Plugin> plugins = new HashMap<String, Plugin>();
 
     /**
@@ -56,5 +61,13 @@ public class PluginManager {
      */
     public boolean isRegistered(final Plugin plugin) {
         return plugins.containsKey(plugin.getSymbol());
+    }
+
+    /**
+     * Fetch the plug-in system specific service.
+     * @return Plug-in system specific service.
+     */
+    public PluginSystemSpecificService fetchStorage() {
+        return storage;
     }
 }

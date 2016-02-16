@@ -5,15 +5,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lovelymonkey.core.model.User;
@@ -33,6 +32,7 @@ public class LoginAndRegisterController {
 
     @Autowired @Setter
     private LoginAndRegisterService loginAndRegisterService;
+    private static Logger logger = Logger.getLogger(LoginAndRegisterController.class);
 
     /**
      * Login method that is used to help user login to our system.
@@ -42,11 +42,12 @@ public class LoginAndRegisterController {
      */
     @RequestMapping(value = "/doLogin.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String doLogin(@RequestParam @NonNull final User u, final HttpSession httpSession) {
+    public String doLogin(final User u, final HttpSession httpSession) {
         String now = Calendar.getInstance().toString();
 
         log.info(String.format("User: [%s] login system at time [%s]",
                 u.getUserName(), now));
+        logger.info("fdsafafa");
 
         boolean isUserExist = loginAndRegisterService.isUserExist(u);
 
@@ -101,11 +102,20 @@ public class LoginAndRegisterController {
      */
     @RequestMapping(value = "/judge.htm", method = {RequestMethod.GET})
     @ResponseBody
-    public String isUserNameUsed(@RequestParam @NonNull final String userName) {
+    public String isUserNameUsed(final String userName) {
         log.info(String.format("Judge if username: [%s] has been used", userName));
 
         boolean isUserNameUsed = loginAndRegisterService.isUserNameUsed(userName);
 
         return Boolean.toString(isUserNameUsed);
+    }
+
+    /**
+     * Send the password reset link to the email address customer typein.
+     * @return The customer specific password reset page.
+     */
+    @RequestMapping(value = "/passwordreset.htm", method = {RequestMethod.POST})
+    public String sendPasswordResetLink() {
+        return null;
     }
 }
