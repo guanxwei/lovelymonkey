@@ -12,8 +12,9 @@ public interface Plugin {
      * The base function that should be override by its sub class.
      * @param input Input object contains the information that need to be handled by the plug-in.
      * @return The response output by plug-in.
+     * @throws PluginException exception.
      */
-    Anything serve(final Anything input);
+    Anything serve(final Anything input) throws PluginException;
 
     /**
      * Return the symbol name of the plug-in.

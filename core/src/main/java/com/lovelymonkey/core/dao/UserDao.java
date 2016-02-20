@@ -21,4 +21,11 @@ public interface UserDao<User> extends BaseDao<User> {
      * @param userName user name.
      */
     void deleteUserByUserName(final String userName);
+
+    /**
+     * Method that is used to fetch user info by email.
+     * @param email The email.
+     * @return The queried user entity.
+     */
+    User getUserByEmail(final String email);
 }

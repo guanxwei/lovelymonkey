@@ -43,4 +43,17 @@ public class UserDaoImp<User> extends BaseDaoImp<User> implements UserDao<User> 
         query.executeUpdate();
     }
 
+    /**
+     * User info management specific function, which is used to fetch the user info by the email.
+     * @param email The email.
+     * @return The user entity.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public User getUserByEmail(final String email) {
+        Query query = getCurrentThreadSession().createQuery(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_EMAIL);
+        query.setString(0, email);
+
+        return (User) query.uniqueResult();
+    }
 }

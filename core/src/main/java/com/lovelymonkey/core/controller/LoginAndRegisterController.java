@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lovelymonkey.core.model.User;
+import com.lovelymonkey.core.plugin.Anything;
+import com.lovelymonkey.core.plugin.Plugin;
+import com.lovelymonkey.core.plugin.PluginException;
+import com.lovelymonkey.core.plugin.PluginManager;
+import com.lovelymonkey.core.plugin.emailnotificationplugin.Email;
+import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.EmailBuilder;
+import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.ReceiverBuilder;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
 import com.lovelymonkey.core.utils.ControllerConstant;
 import com.lovelymonkey.core.utils.RequestHandleConstant;
@@ -32,7 +38,11 @@ public class LoginAndRegisterController {
 
     @Autowired @Setter
     private LoginAndRegisterService loginAndRegisterService;
-    private static Logger logger = Logger.getLogger(LoginAndRegisterController.class);
+
+    @Autowired
+    private PluginManager pluginManager;
+
+    private static final int RETRY_TIMES = 3;
 
     /**
      * Login method that is used to help user login to our system.
@@ -47,7 +57,6 @@ public class LoginAndRegisterController {
 
         log.info(String.format("User: [%s] login system at time [%s]",
                 u.getUserName(), now));
-        logger.info("fdsafafa");
 
         boolean isUserExist = loginAndRegisterService.isUserExist(u);
 
@@ -76,7 +85,6 @@ public class LoginAndRegisterController {
         /* Before registering, we still need to check if the userName has been used for other users. */
         log.info("Check if the user name [{}] has been used before", u.getUserName());
         List<User> users = loginAndRegisterService.getUserList("from User where 1 = 1", null);
-        System.out.println("hello world");
         for (User tempUser : users) {
             System.out.println(tempUser.getUserName());
         }
@@ -111,11 +119,61 @@ public class LoginAndRegisterController {
     }
 
     /**
-     * Send the password reset link to the email address customer typein.
+     * Send the password reset link to the email address customer typed in.
+     * @param email The email address of customer.
      * @return The customer specific password reset page.
+     * @throws PluginException The exception.
      */
     @RequestMapping(value = "/passwordreset.htm", method = {RequestMethod.POST})
-    public String sendPasswordResetLink() {
-        return null;
+    @ResponseBody
+    public String sendPasswordResetLink(final String email) {
+        log.info(String.format("Receive passWord reset request for :", email));
+
+        User user = loginAndRegisterService.getUserByEmail(email);
+        if (user == null) {
+            return ControllerConstant.LoginAndRegisterControlerConstants.EMAIL_NOT_EXISTED;
+        }
+        Plugin emailSendPlugin = pluginManager.getPluginByName("emailnotificationplugin");
+        Anything link = new Anything();
+        Email mail = EmailBuilder.builder()
+                .subject(ControllerConstant.LoginAndRegisterControlerConstants.PASS_WORD_RESET_SUBJECT)
+                .receiver(ReceiverBuilder.builder()
+                        .receiveAddress(user.getEmail())
+                        .build())
+                .build();
+        link.setValue(mail);
+        int count = 0;
+        try {
+            emailSendPlugin.serve(link);
+        } catch (PluginException e) {
+            log.error("Failed to send email to customer, will retry if possible");
+            if (emailSendPlugin.isRetriable() && count++ < RETRY_TIMES) {
+                try {
+                    emailSendPlugin.serve(link);
+                } catch (PluginException e1) {
+                    log.error("Failed to send email to customer again {}th times", count + 1);
+                }
+            }
+            return Boolean.FALSE.toString();
+        }
+        return Boolean.TRUE.toString();
+    }
+
+    /**
+     * Verify if the email has been used or not.
+     * @param email The email address.
+     * @return The verification result.
+     */
+    @RequestMapping(value = "/verifymail.htm", method = {RequestMethod.GET})
+    @ResponseBody
+    public String isEmailUsed(final String email) {
+        log.info("Verify if email : {} has been used or not", email);
+
+        User user = loginAndRegisterService.getUserByEmail(email);
+        if (user == null) {
+            return Boolean.FALSE.toString();
+        } else {
+            return Boolean.TRUE.toString();
+        }
     }
 }

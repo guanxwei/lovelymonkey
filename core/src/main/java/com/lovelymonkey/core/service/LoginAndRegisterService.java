@@ -126,4 +126,19 @@ public class LoginAndRegisterService {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Get specific user entity by email.
+     * @param email The email.
+     * @return The user.
+     */
+    public User getUserByEmail(final String email) {
+        try {
+            User user = (User) userDaoImp.getUserByEmail(email);
+            return user;
+        } catch (Exception e) {
+            log.error(String.format("Failed to fetch user : [%s]", email));
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -25,14 +25,14 @@ public class EmailNotificationWorkerTest extends TestBase{
 
     private GreenMail greenMail;
 
-    @BeforeMethod
+    //@BeforeMethod
     public void BeforeMethod() {
         this.greenMail = new GreenMail(ServerSetup.SMTPS);
         greenMail.setUser("1026189878@qq.com", "qweQWE123");
         greenMail.start();
     }
 
-    @AfterMethod
+    //@AfterMethod
     public void AfterMethod() {
         greenMail.stop();
     }

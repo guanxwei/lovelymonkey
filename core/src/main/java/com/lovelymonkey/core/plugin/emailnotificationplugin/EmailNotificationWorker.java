@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailNotificationWorker {
 
     private static final int DEFAULT_WORKERS = 5;
+    private static final int RETRY_TIMES = 3;
     private static final BlockingQueue<Email> EMAIL_QUEUE = new LinkedBlockingQueue<Email>(100);
     private static final Thread[] THREADS = new Thread[DEFAULT_WORKERS];
 
@@ -72,6 +73,7 @@ public class EmailNotificationWorker {
 
             while (true) {
                 Email email = null;
+                int count = 0;
                 try {
                     email = EMAIL_QUEUE.take();
                     if (email == null) {
@@ -81,14 +83,18 @@ public class EmailNotificationWorker {
                     sendEmail(email);
                     log.info("Successfully sent email to customer");
                 } catch (Exception e) {
-                    try {
-                        if (email != null) {
-                            EMAIL_QUEUE.put(email);
-                        }
-                    } catch (InterruptedException e1) {
-                        log.error("Failed to put back the unsent mail [{}] to the queue", email.getSubject());
-                    }
                     log.error(String.format("Error happened when the worker try to take email from the email queue, for detail: [%s] ", e));
+
+                    /**
+                     * Will try to send the email again for at most <code>RETRY_TIMES</code> times.
+                     */
+                    if (count++ < RETRY_TIMES) {
+                        try {
+                            sendEmail(email);
+                        } catch (Exception e1) {
+                            log.error("Fail ggain, the {}th times", count + 1);
+                        }
+                    }
                 }
             }
         }

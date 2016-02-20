@@ -90,6 +90,33 @@ public class LoginAndRegisterControllerTest extends TestBase{
         loginAndRegisterService.deleteUser(u);
     }
 
+    /**
+     * Test email is used happy case.
+     */
+    @Test(dataProvider="emailStatusProvider")
+    public void testEmailIsUsed(boolean used) throws Exception {
+        if (used) {
+            populateUserInDB("random");
+
+            String url = "/user/verifymail.htm?email=mail";
+            MockHttpServletRequestBuilder builder = (MockHttpServletRequestBuilder) getRequestBuilder(url);
+            MvcResult result = getMockMvc().perform(builder)
+                    .andDo(MockMvcResultHandlers.print())
+                    .andReturn();
+            Assert.assertNotNull(result.getResponse().getContentAsString());
+            Assert.assertEquals(result.getResponse().getContentAsString(), "true");
+            loginAndRegisterService.deleteUserByUserName("random");
+        } else {
+            String url = "/user/verifymail.htm?email=mail";
+            MockHttpServletRequestBuilder builder = (MockHttpServletRequestBuilder) getRequestBuilder(url);
+            MvcResult result = getMockMvc().perform(builder)
+                    .andDo(MockMvcResultHandlers.print())
+                    .andReturn();
+            Assert.assertNotNull(result.getResponse().getContentAsString());
+            Assert.assertEquals(result.getResponse().getContentAsString(), "false");
+        }
+    }
+ 
     @DataProvider(name="userInfoProvider")
     private Object[][] userInfoProvider() {
         return new Object[][]{
@@ -108,6 +135,13 @@ public class LoginAndRegisterControllerTest extends TestBase{
         };
     }
 
+    @DataProvider(name="emailStatusProvider")
+    private Object[][] emailUsedStatusProvider() {
+        return new Object[][]{
+                {true},
+                {false}
+        };
+    }
     /**
      * 
      * @param userName The UserName of a specific user.
@@ -117,6 +151,7 @@ public class LoginAndRegisterControllerTest extends TestBase{
         User u = UserBuilder.builder()
                 .userName(userName)
                 .passWord("pass")
+                .email("mail")
                 .build();
 
         loginAndRegisterService.updateOrSaveUser(u);

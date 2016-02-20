@@ -21,7 +21,7 @@ public class EmailNotificationPlugin implements Plugin {
     private EmailNotificationWorker worker;
 
     @Override
-    public Anything serve(final Anything input) {
+    public Anything serve(final Anything input) throws EmailSendExeception {
         Email email = (Email) input.getValue();
         Anything output = new Anything();
 
@@ -35,6 +35,7 @@ public class EmailNotificationPlugin implements Plugin {
         } catch (InterruptedException e) {
             output.setValue("N");
             log.error("Something wrong happened when it tried to add the email: [%s] to the email queue, the root cause is [%s]", email.toString(), e);
+            throw new EmailSendExeception(e);
         }
 
         return output;

@@ -23,7 +23,7 @@ public class RequestHandleConstant {
         /**
          * The url user will visit if the customer login successfully.
          */
-        public static final String LOGIN_SYSTEM_SUCCESS = "";
+        public static final String LOGIN_SYSTEM_SUCCESS = "success";
 
         /**
          * The url user will visit if the customer inout the wrong user info.
@@ -44,6 +44,11 @@ public class RequestHandleConstant {
          * Current user mapping to a specific customer(via sessionID), which will be stored in session managed by server.
          */
         public static final String CURRENT_USER = "current_user";
+
+        /**
+         * Notification to client that the pass word reset request handler link has been sent to customer's mailbox.
+         */
+        public static final String SEND_PASSWORD_RESET_EMAIL_SUCCESS = "success";
     }
 
 }
