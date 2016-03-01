@@ -19,7 +19,7 @@ import com.lovelymonkey.core.plugin.emailnotificationplugin.EmailNotificationWor
  *
  */
 @Configuration
-@PropertySource(value = "classpath:com/lovelymonkey/core/plugin/emailnotificationplugin/account.properties", name = "account")
+@PropertySource(value = "classpath:account.properties", name = "account")
 public class PluginConfiguration {
 
     @Autowired

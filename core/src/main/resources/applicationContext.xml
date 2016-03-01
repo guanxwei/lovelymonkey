@@ -23,6 +23,9 @@
 
     <!-- 打开spring的annotation的支持 -->
     <context:annotation-config />
+    <context:component-scan base-package="com.lovelymonkey.core" >
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
     <!-- 设定spring去那些包中找annotation -->
     <!-- <context:component-scan base-package="com.dynamicform.web"/> -->    
     <!-- 导入src目录下的jdbc.properties文件 -->

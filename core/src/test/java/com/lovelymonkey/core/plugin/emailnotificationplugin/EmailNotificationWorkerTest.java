@@ -7,8 +7,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.icegreen.greenmail.util.GreenMail;
-import com.icegreen.greenmail.util.ServerSetup;
 import com.lovelymonkey.core.functional.TestBase;
 import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.EmailBuilder;
 import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.ReceiverBuilder;
@@ -21,20 +19,6 @@ public class EmailNotificationWorkerTest extends TestBase{
     @Autowired
     private JavaMailSenderImpl realSender;
 
-    private GreenMail greenMail;
-
-    //@BeforeMethod
-    public void BeforeMethod() {
-        this.greenMail = new GreenMail(ServerSetup.SMTPS);
-        greenMail.setUser("1026189878@qq.com", "qweQWE123");
-        greenMail.start();
-    }
-
-    //@AfterMethod
-    public void AfterMethod() {
-        greenMail.stop();
-    }
-
     @Test
     public void testWorkerInitiateHappyCase() {
         Assert.assertNotNull(worker);
@@ -44,7 +28,7 @@ public class EmailNotificationWorkerTest extends TestBase{
         Assert.assertEquals(realSender.getDefaultEncoding(), "UTF-8");
         Assert.assertEquals(realSender.getProtocol(), "smtp");
         Assert.assertEquals(realSender.getUsername(), "1026189878@qq.com");
-        Assert.assertEquals(realSender.getPassword(), "qweQWE123");
+        Assert.assertEquals(realSender.getPassword(), "dxyDXY@123");
     }
 
     @Test

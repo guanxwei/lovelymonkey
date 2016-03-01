@@ -31,7 +31,6 @@
     var passWordResetListener = function(response) {
         console.debug(response);
         if (response == "success") {
-            window
         }
     }
     var passReset = function(response) {
