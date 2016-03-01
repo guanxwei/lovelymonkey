@@ -10,7 +10,7 @@
         }, 1000);
     });
 
-    var loginSubmitListener = function (response) {
+    var loginSubmitListener = function(response) {
         console.debug(response);
         if (response == "success") {
              window.location.href = "index.html";
@@ -19,7 +19,7 @@
         } 
     }
 
-    var singUpSubmitListener = function (response) {
+    var singUpSubmitListener = function(response) {
         console.debug(response);
         if (response == "success") {
             window.location.href = "index.html";
@@ -28,9 +28,22 @@
         }
     }
 
+    var passWordResetListener = function(response) {
+        console.debug(response);
+        if (response == "success") {
+            window
+        }
+    }
+    var passReset = function(response) {
+        console.debug(response);
+        if (response == "true") {
+
+        }
+    }
+
     var canBeSubmited = false;
     var signUpValidator = function() {
-        canBeSubmited = userNameEligible && ($("#signup input[name='passWord']").val() == $("#signup input[name='passWordRetry']").val());
+        canBeSubmited = emailEligible && userNameEligible && ($("#signup input[name='passWord']").val() == $("#signup input[name='passWordRetry']").val());
     }
 
     function registerFormSubmitListener(identity, dataType, successCallBack, validate) {

@@ -56,10 +56,13 @@
         <div id="forgot" class="tab-pane">
             <form action="index.html" class="form-signin" method="post">
                 <p class="text-muted text-center btn-block btn btn-primary btn-rect">Enter your valid e-mail</p>
-                <input type="email"  required="required" placeholder="Your E-mail"  class="form-control" />
+                <input type="email"  required="required" placeholder="Your E-mail"  class="form-control" name="email" />
                 <br />
                 <button class="btn text-muted text-center btn-success" type="submit">Recover Password</button>
             </form>
+            <script type="text/javascript">
+
+            </script>
         </div>
         <div id="signup" class="tab-pane">
             <form action="user/doRegister.htm" class="form-signin" method="post">
@@ -67,13 +70,15 @@
                 <input type="text" placeholder="Username" class="form-control" name="userName" />
                 <p id="userNameTip" style="display: none; color: red">This user name has been used</p>
                 <input type="email" placeholder="Your E-mail" class="form-control" name="email" />
+                <p id="emailTip" style="display: none; color: red">This user name has been used</p>
                 <input type="password" placeholder="password" class="form-control" name="passWord" />
                 <input type="password" placeholder="Re type password" class="form-control" name="passWordRetry"/>
                 <button class="btn text-muted text-center btn-success" type="submit">Register</button>
             </form>
             <script type="text/javascript">
                 var userNameEligible = false;
-                $("input[name='userName']").change(function(event) {
+                var emailEligible = false;
+                $("#signup input[name='userName']").change(function(event) {
                     $.ajax({
                         url: 'user/judge.htm?userName=' + $(this).val(),
                         type: 'GET',
@@ -93,7 +98,32 @@
                     })
                     .fail(function() {
                         console.log("error");
+                    });
+                });
+
+                $("#signup input[name='email']").change(function() {
+                    $.ajax({
+                        url: '/user/verifymail.htm?email=' + $(this).val(),
+                        type: 'GET',
+                        dataType: 'text',
                     })
+                    .done(function(response) {
+                        console.log("success");
+                        if (response == "true") {
+                            console.debug("Email has been registerred");
+                            $("#emailTip").css("display", "inline");
+                            emailEligible = false;
+                        } else {
+                            console.debug("Email can be used");
+                            emailEligible = true;
+                            $("#emailTip").css("display", "none");
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                        alert("System is busy, please try again later.")
+                    });
+                    
                 });
             </script>
         </div>

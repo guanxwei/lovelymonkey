@@ -116,7 +116,7 @@ public class LoginAndRegisterControllerTest extends TestBase{
             Assert.assertEquals(result.getResponse().getContentAsString(), "false");
         }
     }
- 
+
     @DataProvider(name="userInfoProvider")
     private Object[][] userInfoProvider() {
         return new Object[][]{
