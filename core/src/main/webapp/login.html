@@ -60,9 +60,6 @@
                 <br />
                 <button class="btn text-muted text-center btn-success" type="submit">Recover Password</button>
             </form>
-            <script type="text/javascript">
-
-            </script>
         </div>
         <div id="signup" class="tab-pane">
             <form action="user/doRegister.htm" class="form-signin" method="post">
@@ -77,53 +74,30 @@
             </form>
             <script type="text/javascript">
                 var userNameEligible = false;
-                var emailEligible = false;
+                var isEmailUsed = false;
+
                 $("#signup input[name='userName']").change(function(event) {
-                    $.ajax({
-                        url: 'user/judge.htm?userName=' + $(this).val(),
-                        type: 'GET',
-                        dataType: 'text',
-                    })
-                    .done(function(response) {
-                        console.log(response);
-                        if ("false" == response) {
-                            console.debug("user name can be used");
-                            $("#userNameTip").css("display", "none");
-                            userNameEligible = true;
-                        } else {
-                            console.debug("usr name can not be used");
-                            $("#userNameTip").css("display", "inline");
-                            userNameEligible = false;
-                        }
-                    })
-                    .fail(function() {
-                        console.log("error");
-                    });
+                    userNameEligible = validate('user/judge.htm?userName=' + $(this).val(), "false");
+                    console.debug("userNameTip");
+                    console.debug(userNameEligible);
+                    if (userNameEligible) {
+                        console.debug("user name can be used");
+                        $("#userNameTip").css("display", "none");
+                    } else {
+                        console.debug("usr name can not be used");
+                        $("#userNameTip").css("display", "inline");
+                    }
                 });
 
                 $("#signup input[name='email']").change(function() {
-                    $.ajax({
-                        url: '/user/verifymail.htm?email=' + $(this).val(),
-                        type: 'GET',
-                        dataType: 'text',
-                    })
-                    .done(function(response) {
-                        console.log("success");
-                        if (response == "true") {
-                            console.debug("Email has been registerred");
-                            $("#emailTip").css("display", "inline");
-                            emailEligible = false;
-                        } else {
-                            console.debug("Email can be used");
-                            emailEligible = true;
-                            $("#emailTip").css("display", "none");
-                        }
-                    })
-                    .fail(function() {
-                        console.log("error");
-                        alert("System is busy, please try again later.")
-                    });
-                    
+                    isEmailUsed = validate('user/verifymail.htm?email=' + $(this).val(), "true");
+                    if (isEmailUsed) {
+                        console.debug("Email has been registerred");
+                        $("#emailTip").css("display", "inline");
+                    } else {
+                        console.debug("Email can be used");
+                        $("#emailTip").css("display", "none");
+                    }
                 });
             </script>
         </div>

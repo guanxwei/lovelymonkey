@@ -6,7 +6,7 @@
     <welcome-file>index.htm</welcome-file>
   </welcome-file-list>
 
-  <!-- add sprinng listener -->
+  <!-- add spring listener -->
   <listener>
       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>

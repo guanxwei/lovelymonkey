@@ -27,8 +27,6 @@ public class EmailNotificationWorkerTest extends TestBase{
         Assert.assertEquals(realSender.getPort(), 465);
         Assert.assertEquals(realSender.getDefaultEncoding(), "UTF-8");
         Assert.assertEquals(realSender.getProtocol(), "smtp");
-        Assert.assertEquals(realSender.getUsername(), "1026189878@qq.com");
-        Assert.assertEquals(realSender.getPassword(), "dxyDXY@123");
     }
 
     @Test

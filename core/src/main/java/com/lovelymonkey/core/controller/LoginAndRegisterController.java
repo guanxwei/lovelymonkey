@@ -61,7 +61,7 @@ public class LoginAndRegisterController {
         boolean isUserExist = loginAndRegisterService.isUserExist(u);
 
         if (isUserExist) {
-            /* The User info provided by login matches record in our storage. */
+            /* The User info provided by login matches record in storage. */
             httpSession.setAttribute(RequestHandleConstant.UserManageStatus.CURRENT_USER, u);
         } else {
             /* The User provide wrong userName or password. */
@@ -147,9 +147,11 @@ public class LoginAndRegisterController {
             emailSendPlugin.serve(link);
         } catch (PluginException e) {
             log.error("Failed to send email to customer, will retry if possible");
-            if (emailSendPlugin.isRetriable() && count++ < RETRY_TIMES) {
+            boolean isOK = false;
+            while (!isOK && emailSendPlugin.isRetriable() && count++ < RETRY_TIMES) {
                 try {
                     emailSendPlugin.serve(link);
+                    isOK = true;
                 } catch (PluginException e1) {
                     log.error("Failed to send email to customer again {}th times", count + 1);
                 }

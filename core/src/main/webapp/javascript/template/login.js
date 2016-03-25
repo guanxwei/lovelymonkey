@@ -1,5 +1,23 @@
-﻿$(function () {
-    
+﻿    function validate(url, successResponse) {
+        $.ajaxSetup({  
+            async : false  
+        });
+        var result = false;
+        $.get(url, function(response) {
+            console.log(typeof response);
+            console.debug(successResponse);
+            console.debug(response);
+            if (successResponse == response) {
+                result = true;
+            }
+        });
+        $.ajaxSetup({  
+            async : true 
+        });
+        return result;
+    }
+
+$(function () {   
     $('.list-inline li > a').click(function () {
         var activeForm = $(this).attr('href') + ' > form';
         //console.log(activeForm);
@@ -13,7 +31,7 @@
     var loginSubmitListener = function(response) {
         console.debug(response);
         if (response == "success") {
-             window.location.href = "index.html";
+             window.location.href = "dashboard.html";
         } else {
              alert("Wrong username or password, please retry!");
         } 
@@ -22,7 +40,7 @@
     var singUpSubmitListener = function(response) {
         console.debug(response);
         if (response == "success") {
-            window.location.href = "index.html";
+            window.location.href = "dashboard.html";
         } else {
             alert("The system is busy, please try again later");
         }
@@ -33,16 +51,12 @@
         if (response == "success") {
         }
     }
-    var passReset = function(response) {
-        console.debug(response);
-        if (response == "true") {
-
-        }
-    }
 
     var canBeSubmited = false;
     var signUpValidator = function() {
-        canBeSubmited = emailEligible && userNameEligible && ($("#signup input[name='passWord']").val() == $("#signup input[name='passWordRetry']").val());
+        userNameEligible = validate('user/judge.htm?userName=' + $("#signup input[name='userName']").val(), "false");
+        isEmailUsed = validate('user/verifymail.htm?email=' + $("#signup input[name='email']").val(), "true");
+        canBeSubmited = emailEligible && !isEmailUsed && ($("#signup input[name='passWord']").val() == $("#signup input[name='passWordRetry']").val());
     }
 
     function registerFormSubmitListener(identity, dataType, successCallBack, validate) {
@@ -53,8 +67,8 @@
             console.debug(url);
             console.debug(validate);
             if (validate != undefined) {
-                var isReady = validate();
-                if (!isReady) {
+                validate();
+                if (!canBeSubmited) {
                     console.debug("Theis is something wrong in the form, please check again");
                     alert("Theis is something wrong in the form, please check again");
                     return;
@@ -80,4 +94,5 @@
     //register submit event listener for the forms
     registerFormSubmitListener("#login button", "text", loginSubmitListener);
     registerFormSubmitListener("#signup button", "text", singUpSubmitListener, signUpValidator);
+    registerFormSubmitListener("#forgot button", "text", passWordResetListener);
 });
