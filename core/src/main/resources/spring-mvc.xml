@@ -11,16 +11,16 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd" >
 
     
     <!-- <mvc:annotation-driven /> 是一种简写形式,
-    	会自动注册DefaultAnnotationHandlerMapping与
-    	AnnotationMethodHandlerAdapter 两个bean,
-    	是spring MVC为@Controllers分发请求所必须的 -->
-	<mvc:annotation-driven />
-	<context:component-scan base-package="com.lovelymonkey.core.controller" />
+        会自动注册DefaultAnnotationHandlerMapping与
+        AnnotationMethodHandlerAdapter 两个bean,
+        是spring MVC为@Controllers分发请求所必须的 -->
+    <mvc:annotation-driven />
+    <context:component-scan base-package="com.lovelymonkey.core.controller" />
 
 
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/jsp/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
-	
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    
 </beans>

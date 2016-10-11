@@ -22,11 +22,11 @@ public class WidgetRegister {
      * @param widget widget.
      */
     public void register(@NonNull final Widget widget) {
-        Widget exists = widgets.get(widget.getSymbol());
+        Widget exists = widgets.get(widget.getName());
         if (exists != null) {
             log.warn("Trying to register exists widget [{}]", exists.getSymbol());
         }
-        widgets.put(widget.getSymbol(), widget);
+        widgets.put(widget.getName(), widget);
     }
 
     /**

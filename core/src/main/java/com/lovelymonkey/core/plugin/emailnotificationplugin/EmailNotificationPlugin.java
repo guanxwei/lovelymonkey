@@ -15,7 +15,10 @@ import com.lovelymonkey.core.plugin.Plugin;
 @Slf4j
 public class EmailNotificationPlugin implements Plugin {
 
-    private static final String PLUGIN_NAME = "emailnotificationplugin";
+    /**
+     * Plug-in name, uniquely to identify the plug-in.
+     */
+    public static final String PLUGIN_NAME = "emailnotificationplugin";
 
     @Autowired
     private EmailNotificationWorker worker;

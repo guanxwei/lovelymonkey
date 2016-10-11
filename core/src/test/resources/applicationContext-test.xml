@@ -60,7 +60,7 @@
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>                    
                 <prop key="hibernate.format_sql">false</prop> 
-                <prop key="hibernate.show_sql">true</prop>    
+                <prop key="hibernate.show_sql">false</prop>    
                 <!-- 如果开启, Hibernate将在SQL中生成有助于调试的注释信息, 默认值为false. 取值 true | false -->
                 <prop key="hibernate.use_sql_comments">false</prop>
                 <!-- Fetch Size 是设定JDBC的Statement读取数据的时候每次从数据库中取出的记录条数。 -->    
@@ -73,7 +73,7 @@
                 <prop key="hibernate.max_fetch_depth">1</prop>
                 <prop key="hibernate.order_updates">true</prop>
                 <!-- 如果开启, Hibernate将收集有助于性能调节的统计数据.取值true|false -->
-                <prop key="hibernate.generate_statistics">true</prop>
+                <prop key="hibernate.generate_statistics">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>

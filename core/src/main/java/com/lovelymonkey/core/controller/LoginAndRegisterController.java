@@ -1,7 +1,6 @@
 package com.lovelymonkey.core.controller;
 
 import java.util.Calendar;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +19,7 @@ import com.lovelymonkey.core.plugin.Plugin;
 import com.lovelymonkey.core.plugin.PluginException;
 import com.lovelymonkey.core.plugin.PluginManager;
 import com.lovelymonkey.core.plugin.emailnotificationplugin.Email;
+import com.lovelymonkey.core.plugin.emailnotificationplugin.EmailNotificationPlugin;
 import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.EmailBuilder;
 import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.ReceiverBuilder;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
@@ -84,10 +84,6 @@ public class LoginAndRegisterController {
 
         /* Before registering, we still need to check if the userName has been used for other users. */
         log.info("Check if the user name [{}] has been used before", u.getUserName());
-        List<User> users = loginAndRegisterService.getUserList("from User where 1 = 1", null);
-        for (User tempUser : users) {
-            System.out.println(tempUser.getUserName());
-        }
 
         boolean isUserNameUsed = loginAndRegisterService.isUserNameUsed(u.getUserName());
         if (isUserNameUsed) {
@@ -95,6 +91,8 @@ public class LoginAndRegisterController {
             return RequestHandleConstant.UserManageStatus.REGISTER_SYSTEM_FAILED;
         }
 
+        /* Default, customer level will be 1, normal customers */
+        u.setLevel(1);
         loginAndRegisterService.updateOrSaveUser(u);
         session.setAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER,
                 loginAndRegisterService.getUserByUserNameAndPSD(u.getUserName(), u.getPassWord()));
@@ -103,10 +101,9 @@ public class LoginAndRegisterController {
     }
 
     /**
-     * UserName check method that is used to guarantee the customer input a unique username so that
-     * duplicate username will not happen.
+     * Method used to check if the username committed by current customer has been used or not.
      * @param userName The username that is typed in by the customer in the front page.
-     * @return The correct page that user should visit determined by the input info provided by customer.
+     * @return The result if the username has been used or not. The front-end page will use it to do the nest step stuffs.
      */
     @RequestMapping(value = "/judge.htm", method = {RequestMethod.GET})
     @ResponseBody
@@ -133,7 +130,7 @@ public class LoginAndRegisterController {
         if (user == null) {
             return ControllerConstant.LoginAndRegisterControlerConstants.EMAIL_NOT_EXISTED;
         }
-        Plugin emailSendPlugin = pluginManager.getPluginByName("emailnotificationplugin");
+        Plugin emailSendPlugin = pluginManager.getPluginByName(EmailNotificationPlugin.PLUGIN_NAME);
         Anything link = new Anything();
         Email mail = EmailBuilder.builder()
                 .subject(ControllerConstant.LoginAndRegisterControlerConstants.PASS_WORD_RESET_SUBJECT)
@@ -153,7 +150,7 @@ public class LoginAndRegisterController {
                     emailSendPlugin.serve(link);
                     isOK = true;
                 } catch (PluginException e1) {
-                    log.error("Failed to send email to customer again {}th times", count + 1);
+                    log.error("Failed to send email to customer again [{}]th times", count + 1);
                 }
             }
             return Boolean.FALSE.toString();
@@ -169,7 +166,7 @@ public class LoginAndRegisterController {
     @RequestMapping(value = "/verifymail.htm", method = {RequestMethod.GET})
     @ResponseBody
     public String isEmailUsed(final String email) {
-        log.info("Verify if email : {} has been used or not", email);
+        log.info("Verify if email : [{}] has been used or not", email);
 
         User user = loginAndRegisterService.getUserByEmail(email);
         if (user == null) {

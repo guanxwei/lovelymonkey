@@ -3,6 +3,7 @@ package com.lovelymonkey.core.plugin.emailnotificationplugin;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +29,9 @@ public class EmailNotificationWorker {
     private static final int RETRY_TIMES = 3;
     private static final BlockingQueue<Email> EMAIL_QUEUE = new LinkedBlockingQueue<Email>(100);
     private static final Thread[] THREADS = new Thread[DEFAULT_WORKERS];
+
+    @Getter
+    private AtomicInteger successRequests = new AtomicInteger();
 
     @Autowired
     @Setter
@@ -81,6 +86,7 @@ public class EmailNotificationWorker {
                         continue;
                     }
                     sendEmail(email);
+                    successRequests.incrementAndGet();
                     log.info("Successfully sent email to customer");
                 } catch (Exception e) {
                     log.error(String.format("Error happened when the worker try to take email from the email queue, for detail: [%s] ", e));
@@ -88,7 +94,7 @@ public class EmailNotificationWorker {
                     /**
                      * Will try to send the email again for at most <code>RETRY_TIMES</code> times.
                      */
-                    if (count++ < RETRY_TIMES) {
+                    while (++count < RETRY_TIMES) {
                         try {
                             sendEmail(email);
                         } catch (Exception e1) {

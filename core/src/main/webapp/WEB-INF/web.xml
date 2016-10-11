@@ -59,5 +59,12 @@
   <listener>
       <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
-  
+
+  <!-- CAS integration configuration segment. Not familiar with CAS? Check this page: https://apereo.github.io/cas/4.2.x/index.html -->
+  <!-- If you want to integrate with CAS server, please umcomment this section to fill in the detail configuration parameter.
+  <context-param>
+    <param-name>configurationStrategy</param-name>
+    <param-value>DEFAULT</param-value>
+  </context-param>
+  -->
 </web-app>

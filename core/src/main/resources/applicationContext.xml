@@ -26,9 +26,6 @@
     <context:component-scan base-package="com.lovelymonkey.core" >
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-    <!-- 设定spring去那些包中找annotation -->
-    <!-- <context:component-scan base-package="com.dynamicform.web"/> -->    
-    <!-- 导入src目录下的jdbc.properties文件 -->
     <context:property-placeholder location="classpath:jdbc.properties"/>
     <!-- 配置c3p0连接池-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -83,7 +80,7 @@
     <!-- 开启配置事务拦截器 -->
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>    
+    </bean>
     <!-- 基本事务定义，使用transactionManager做事务管理，默认get*，find*方法的事务为read-only -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
