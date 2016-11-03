@@ -1,5 +1,7 @@
 package com.lovelymonkey.core.widget;
 
+import java.util.List;
+
 import lombok.Getter;
 
 /**
@@ -16,28 +18,38 @@ public abstract class Widget {
     private static final String VERSION = "widget:1.0";
 
     /**
-     * Get widget group name.
-     * @return group name
-     */
-    protected abstract WidgetGroup getGroup();
-
-    /**
      * Get widget name.
      * @return widget name.
      */
-    protected abstract String getName();
+    public abstract String getName();
 
     /**
      * Get widget symbol.
      * @return widget symbol.
      */
-    protected abstract String getSymbol();
+    public abstract String getSymbol();
 
     /**
      * Get the widget level of this widget.
      * @return widget level.
      */
-    protected abstract WidgetLevel getWidgetLevel();
+    public abstract WidgetLevel getWidgetLevel();
+
+    /**
+     * Get the children widgets of this widget.
+     * @return children widgets.
+     */
+    public List<Widget> getChildren() {
+        return null;
+    }
+
+    /**
+     * Get the widget's user authority, default value 1. So that all customers including visitors can visit the widget.
+     * @return widget authority
+     */
+    public int getWidgetAuthority() {
+        return 1;
+    }
 
     /**
      * Widget level.

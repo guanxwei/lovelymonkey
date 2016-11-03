@@ -40,11 +40,11 @@ import java.util.List;
 
     /**
      * Common method that is used to return the count fulfill the query string.
-     * @param hql Query string.
+     * @param sql Orignal SQL Query string.
      * @param params Parameters which will represents the ? in hql.
      * @return The number of objects fuifill the query string.
      */
-     int count(final String hql, final String ...params);
+     int count(final String sql, final String ...params);
 
     /**
      * Common method that is used to get the paging data, which locates from in range [(pageIndex-1)*pageSize,pageIndex*pageSize-1].

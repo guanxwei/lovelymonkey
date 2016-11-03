@@ -5,14 +5,17 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.lovelymonkey.core.builder.UserBuilder;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
-import com.lovelymonkey.core.utils.ControllerConstant;
 import com.lovelymonkey.core.utils.RequestHandleConstant;
+import com.lovelymonkey.core.utils.constants.controller.LoginAndRegisterControlerConstants;
 
 public class LoginAndRegisterControllerTest extends TestBase{
 
@@ -62,7 +65,7 @@ public class LoginAndRegisterControllerTest extends TestBase{
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
-        User currentUser = (User) result.getRequest().getSession().getAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER);
+        User currentUser = (User) result.getRequest().getSession().getAttribute(LoginAndRegisterControlerConstants.CURRENT_USER);
         Assert.assertNotNull(currentUser);
         Assert.assertEquals(currentUser.getUserName(), USER_NAME_UNUSED);
         Assert.assertEquals(currentUser.getPassWord(), "123456");
@@ -160,4 +163,22 @@ public class LoginAndRegisterControllerTest extends TestBase{
         return u;
     }
 
+    /**
+     * Invoked automatically by TestNG framework. In case any Exceptions thrown while dirty data items
+     * were not cleaned up in local derby database, this method may help clean up the DB. 
+     * The root cause is that, some integration test cases need some setup(prepare database items in local derby database)
+     * before normal function test, these data items should be deleted once those test cases executed.
+     * Since the transaction is managed automatically by Spring at service level, if one test case invoke
+     * service level method multi times, and the later method calls failed, the db action caused by the preceding
+     * method call may leave inconsistent data, we should remove them.
+     */
+    @AfterMethod
+    public void cleanup() {
+        try {
+            loginAndRegisterService.deleteUserByUserName(USER_NAME_USED);
+            loginAndRegisterService.deleteUserByUserName(USER_NAME_USED);
+        } catch (Exception e) {
+            //Nothing to delete, it is normal.
+        }
+    }
 }

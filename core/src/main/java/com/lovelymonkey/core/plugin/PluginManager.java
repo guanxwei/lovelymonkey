@@ -22,7 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 public class PluginManager {
 
     @Autowired
-    private PluginSystemSpecificService storage;
+    private PluginSystemSpecificService pluginSystemSpecificService;
+
     private final Map<String, Plugin> plugins = new HashMap<String, Plugin>();
 
     /**
@@ -68,6 +69,6 @@ public class PluginManager {
      * @return Plug-in system specific service.
      */
     public PluginSystemSpecificService fetchStorage() {
-        return storage;
+        return pluginSystemSpecificService;
     }
 }

@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import com.lovelymonkey.core.dao.impl.UserDaoImp;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
-import com.lovelymonkey.core.utils.SQLQueryConstant;
+import com.lovelymonkey.core.utils.constants.sql.UserInfoQuery;
 
 public class LoginAndRegisterServiceTest {
 
@@ -46,9 +46,9 @@ public class LoginAndRegisterServiceTest {
     @Test(dataProvider="userNameDataProvider")
     public void testIsUserNameUsed(String userName) {
         if (userName.equals("used")) {
-            Mockito.when(dao.count(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_USERNAME, userName)).thenReturn(1);
+            Mockito.when(dao.count(UserInfoQuery.QUERY_USER_BY_USERNAME, userName)).thenReturn(1);
         } else {
-            Mockito.when(dao.count(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_USERNAME, userName)).thenReturn(0);
+            Mockito.when(dao.count(UserInfoQuery.QUERY_USER_BY_USERNAME, userName)).thenReturn(0);
         }
         boolean result = service.isUserNameUsed(userName);
         if (userName.equals("notused")) {

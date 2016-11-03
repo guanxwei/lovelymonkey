@@ -8,8 +8,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.lovelymonkey.core.dao.UserDao;
+import com.lovelymonkey.core.model.PasswordResetRecord;
 import com.lovelymonkey.core.model.User;
-import com.lovelymonkey.core.utils.SQLQueryConstant;
+import com.lovelymonkey.core.utils.constants.sql.UserInfoQuery;
 
 /**
  * LoginAndRegisterService.
@@ -59,7 +60,7 @@ public class LoginAndRegisterService {
      */
     public boolean isUserNameUsed(final String userName) {
         try {
-            int count = userDaoImp.count(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_USERNAME, userName);
+            int count = userDaoImp.count(UserInfoQuery.QUERY_USER_BY_USERNAME, userName);
             return count == 0 ? false : true;
         } catch (Exception e) {
             log.error(String.format("Failed to query userinfo for username: [%s]", userName));
@@ -139,6 +140,19 @@ public class LoginAndRegisterService {
         } catch (Exception e) {
             log.error(String.format("Failed to fetch user : [%s]", email));
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Insert a record for a password reset request.
+     * @param record single record information for a password reset request.
+     */
+    @SuppressWarnings("unchecked")
+    public void record(@NonNull final PasswordResetRecord record) {
+        try {
+            userDaoImp.updateOrSaveEntity(record);
+        } catch (Exception e) {
+            log.error("Failed to insert a record for userid [{}]", record.getUserId());
         }
     }
 }

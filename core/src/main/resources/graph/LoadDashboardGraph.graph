@@ -1,0 +1,23 @@
+{
+  "graphName":"LoadDashboardGraph",
+  "resourceType":"MIXED",
+  "startNode":"LoadNavigatorBarActivity",
+  "defaultErrorNode":"errorHandler",
+  "nodes":[
+    {
+      "nodeName":"LoadNavigatorBarActivity",
+      "activityClass":"com.lovelymonkey.core.activity.dashboard.LoadNavigatorBarActivity",
+      "successNode":"LoadSideBarActivity",
+      "failNode":"failHandler"
+    },
+    {
+      "nodeName":"LoadSideBarActivity",
+      "activityClass":"com.lovelymonkey.core.activity.dashboard.LoadSideBarActivity",
+      "failNode":"node3"
+    },
+    {
+      "nodeName":"errorHandler",
+      "activityClass":"com.lovelymonkey.core.activity.ErrorHandlerActivity"
+    }
+  ]
+}

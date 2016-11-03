@@ -33,7 +33,7 @@ public class RequestHandleConstant {
         /**
          * The url user will visit if the customer register in our system successfully.
          */
-        public static final String REGISTER_SYSTEM_SUCCESS = "";
+        public static final String REGISTER_SYSTEM_SUCCESS = "success";
 
         /**
          * The url user will visit if the customer fail to register in our system.

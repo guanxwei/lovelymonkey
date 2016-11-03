@@ -2,7 +2,7 @@ package com.lovelymonkey.core.dao.impl;
 
 import com.lovelymonkey.core.dao.UserDao;
 import com.lovelymonkey.core.model.User;
-import com.lovelymonkey.core.utils.SQLQueryConstant;
+import com.lovelymonkey.core.utils.constants.sql.UserInfoQuery;
 
 import org.hibernate.Query;
 
@@ -24,7 +24,7 @@ public class UserDaoImp<User> extends BaseDaoImp<User> implements UserDao<User> 
     @SuppressWarnings("unchecked")
     @Override
     public User getUserByUserNameAndPSD(final String userName, final String accountPSD) {
-        Query query = getCurrentThreadSession().createQuery(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_USERNAME_AND_PSD);
+        Query query = getCurrentThreadSession().createQuery(UserInfoQuery.QUERY_USER_BY_USERNAME_AND_PSD);
         query.setString(0, userName);
         query.setString(1, accountPSD);
 
@@ -37,7 +37,7 @@ public class UserDaoImp<User> extends BaseDaoImp<User> implements UserDao<User> 
      */
     @Override
     public void deleteUserByUserName(final String userName) {
-        Query query = getCurrentThreadSession().createQuery(SQLQueryConstant.UserInfoQuery.DELETE_USER_BY_USERNAME);
+        Query query = getCurrentThreadSession().createQuery(UserInfoQuery.DELETE_USER_BY_USERNAME);
         query.setString(0, userName);
 
         query.executeUpdate();
@@ -51,7 +51,7 @@ public class UserDaoImp<User> extends BaseDaoImp<User> implements UserDao<User> 
     @SuppressWarnings("unchecked")
     @Override
     public User getUserByEmail(final String email) {
-        Query query = getCurrentThreadSession().createQuery(SQLQueryConstant.UserInfoQuery.QUERY_USER_BY_EMAIL);
+        Query query = getCurrentThreadSession().createQuery(UserInfoQuery.QUERY_USER_BY_EMAIL);
         query.setString(0, email);
 
         return (User) query.uniqueResult();

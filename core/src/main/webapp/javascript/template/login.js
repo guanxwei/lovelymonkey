@@ -1,21 +1,21 @@
-﻿    function validate(url, successResponse) {
-        $.ajaxSetup({  
-            async : false  
-        });
-        var result = false;
-        $.get(url, function(response) {
-            console.log(typeof response);
-            console.debug(successResponse);
-            console.debug(response);
-            if (successResponse == response) {
-                result = true;
-            }
-        });
-        $.ajaxSetup({  
-            async : true 
-        });
-        return result;
-    }
+﻿function validate(url, successResponse) {
+    $.ajaxSetup({  
+        async : false  
+    });
+    var result = false;
+    $.get(url, function(response) {
+        console.log(typeof response);
+        console.debug(successResponse);
+        console.debug(response);
+        if (successResponse == response) {
+            result = true;
+        }
+    });
+    $.ajaxSetup({  
+        async : true 
+    });
+    return result;
+}
 
 $(function () {   
     $('.list-inline li > a').click(function () {
@@ -31,9 +31,10 @@ $(function () {
     var loginSubmitListener = function(response) {
         console.debug(response);
         if (response == "success") {
-             window.location.href = "dashboard.html";
+            window.location.href = "dashboard.html";
         } else {
-             alert("Wrong username or password, please retry!");
+            loginFails = response.split(":")[1];
+            alert("Wrong username or password, please retry!");
         } 
     }
 
@@ -48,26 +49,37 @@ $(function () {
 
     var passWordResetListener = function(response) {
         console.debug(response);
-        if (response == "success") {
-        }
+        $("#forgot button").before("<p style='color:red'>Password reset email has been sent to your mail, please go to check</p>");
+        $("#forgot button").remove();
+
     }
 
     var canBeSubmited = false;
+    var loginFails = 0;
+
     var signUpValidator = function() {
-        userNameEligible = validate('user/judge.htm?userName=' + $("#signup input[name='userName']").val(), "false");
-        isEmailUsed = validate('user/verifymail.htm?email=' + $("#signup input[name='email']").val(), "true");
-        canBeSubmited = emailEligible && !isEmailUsed && ($("#signup input[name='passWord']").val() == $("#signup input[name='passWordRetry']").val());
+        let userNameEligible = validate('user/judge.htm?userName=' + $("#signup input[name='userName']").val(), "false");
+        let emailEligible = validate('user/verifymail.htm?email=' + $("#signup input[name='email']").val(), "false");
+        canBeSubmited = userNameEligible && emailEligible && ($("#signup input[name='passWord']").val() == $("#signup input[name='passWordRetry']").val());
     }
 
-    function registerFormSubmitListener(identity, dataType, successCallBack, validate) {
+    var loginValidator = function() {
+        if (loginFails > 5) {
+            alert("Retry times has exceeded the limited, take a rest!");
+            cabBeSubmited = false;
+        }
+        cabBeSubmited = true;
+    }
+
+    function registerFormSubmitListener(identity, dataType, successCallBack, validator) {
         $(identity).click(function(event) {
             event.preventDefault();
             var url = $(this).parent().attr('action');
             var data = $(this).parent().serialize();
             console.debug(url);
             console.debug(validate);
-            if (validate != undefined) {
-                validate();
+            if (validator != undefined) {
+                validator();
                 if (!canBeSubmited) {
                     console.debug("Theis is something wrong in the form, please check again");
                     alert("Theis is something wrong in the form, please check again");
@@ -81,13 +93,11 @@ $(function () {
                 data: data,
             })
             .done(function(response) {
-
                 successCallBack(response);
             })
             .fail(function() {
                 console.log("error");
             })
-            
         })
     }
 

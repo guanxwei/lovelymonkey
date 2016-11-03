@@ -14,15 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.lovelymonkey.core.utils.ControllerConstant;
 import com.lovelymonkey.core.utils.FilterUtils;
+import com.lovelymonkey.core.utils.constants.controller.LoginAndRegisterControlerConstants;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * Filter to interfere the requests that are not authorized to visit some resources.
- * This filter is optional to the system, if this system is intended to integrate
- * with other Auto-Authority management system like CAS, then they don't need it.
+ * Filter to interfere the requests that are not authorized to visit resources.
+ * This filter is optional to the system, if the system is intended to integrate
+ * with other Auto-Authority management system like CAS, then we don't need it.
  * If the system is planed to be deployed as single point fully managed by the system
  * itself, then the system administrator may need to plug this filter into
  * the system to help manage the resource permission stuffs.
@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j;
  * Except the auth configuration, customers should also add one line at the top of property file, which
  * specify the login page that customers will be redirected to.
  */
-@Log4j
+@Slf4j
 public class AuthFilter implements Filter {
 
     private HashSet<String> protectedResources;
@@ -88,7 +88,7 @@ public class AuthFilter implements Filter {
         String uri = httpRequest.getRequestURI();
         if (protectedResources.contains(uri)) {
             HttpSession session = httpRequest.getSession(false);
-            if (session.getAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER) == null) {
+            if (session.getAttribute(LoginAndRegisterControlerConstants.CURRENT_USER) == null) {
                 log.info("Customer has not logined yet, will direct him to login portal page!");
                 String contructedDirectedURL = httpRequest.getRequestURL().toString() + httpRequest.getQueryString();
                 httpResponse.sendRedirect(FilterUtils.constructRedirectURL(portal, VISIT_SOURCE, contructedDirectedURL));

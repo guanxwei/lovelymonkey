@@ -72,18 +72,18 @@ public class BaseDaoImp<T> implements BaseDao<T> {
 
     /**
      * Common method realization that is used to query the number of objects, which match the request.
-     * @param hql Query string.
+     * @param sql Query string.
      * @param params Parameters which will represents the ? in hql.
      * @return The number of objects fuifill the query string.
      */
-    public int count(final String hql, final String ...params) {
+    public int count(final String sql, final String ...params) {
         // TODO Auto-generated method stub
-        Query query = getCurrentThreadSession().createQuery(hql);
+        Query query = getCurrentThreadSession().createSQLQuery(sql);
         int count = 0;
         for (String param : params) {
             query.setString(count++, param);
         }
-        return query.uniqueResult() == null ? 0 : 1;
+        return query.uniqueResult() == null ? 0 : ((Integer)query.uniqueResult()).intValue();
     }
 
     /**
@@ -92,7 +92,7 @@ public class BaseDaoImp<T> implements BaseDao<T> {
      * @param pageSize Page size.
      * @param hql SQL query string.
      * @param params Parameters which will represents the ? in hql.
-     * @return he list of objects fulfill the query string.
+     * @return the list of objects fulfill the query string.
      */
     @SuppressWarnings("unchecked")
     public List<T> getListByPageIndex(final int pageIndex, final int pageSize, final String hql, final String ...params) {

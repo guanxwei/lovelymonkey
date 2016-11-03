@@ -5,16 +5,8 @@
 <title>Portal Page</title>
 </head>
 <body>
-<script>
-function getBasePath() {
-    var curWwwPath = window.document.location.href;
-    var pathName = window.document.location.pathname;
-    var pos = curWwwPath.indexOf(pathName);
-    var localhostPath = curWwwPath.substring(0, pos);
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-    return (localhostPath + projectName);
-}
-window.location.href = getBasePath() + "/dashboard.html";
-</script>
+<div>
+Welcome to lovely monkey!
+</div>
 </body>
 </html>

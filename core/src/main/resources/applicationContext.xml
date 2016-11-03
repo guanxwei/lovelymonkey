@@ -71,7 +71,7 @@
                 <prop key="hibernate.max_fetch_depth">1</prop>
                 <prop key="hibernate.order_updates">true</prop>
                 <!-- 如果开启, Hibernate将收集有助于性能调节的统计数据.取值true|false -->
-                <prop key="hibernate.generate_statistics">true</prop>
+                <prop key="hibernate.generate_statistics">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>

@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 
@@ -33,7 +34,6 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests{
     public void init() {
         MockitoAnnotations.initMocks(this);
     }
-
 
     @BeforeClass
     public void setup() {

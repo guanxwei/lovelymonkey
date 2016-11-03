@@ -5,7 +5,7 @@ import java.util.List;
 import com.lovelymonkey.core.dao.BaseDao;
 import com.lovelymonkey.core.model.Menu;
 import com.lovelymonkey.core.model.User;
-import com.lovelymonkey.core.utils.SQLQueryConstant;
+import com.lovelymonkey.core.utils.constants.sql.MenuInfoQuery;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,7 +32,7 @@ public class LoadUserSpaceMenuService {
         log.info("Fetch menu list for user [{}], user's level is [{}]", user.getUserName(), user.getLevel());
 
         try {
-            return baseDao.list(SQLQueryConstant.MenuInfoQuery.QUERY_MENE_BY_USER_LEVEL,
+            return baseDao.list(MenuInfoQuery.QUERY_MENE_BY_USER_LEVEL,
                     String.valueOf(user.getLevel()));
         } catch (Exception e) {
             log.error("Failed to fetch menu list for user [{}]", user.getUserName());

@@ -1,0 +1,17 @@
+{
+  "graphName":"LoadWidgetGraph",
+  "resourceType":"MIXED",
+  "startNode":"CheckActivity",
+  "defaultErrorNode":"errorHandler",
+  "nodes":[
+    {
+      "nodeName":"CheckActivity",
+      "activityClass":"com.lovelymonkey.core.activity.widget.CheckWidgetActivity",
+      "failNode":"errorHandler"
+    },
+    {
+      "nodeName":"errorHandler",
+      "activityClass":"com.lovelymonkey.core.activity.ErrorHandlerActivity"
+    }
+  ]
+}

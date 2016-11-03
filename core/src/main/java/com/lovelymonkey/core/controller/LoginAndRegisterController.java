@@ -1,6 +1,7 @@
 package com.lovelymonkey.core.controller;
 
 import java.util.Calendar;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lovelymonkey.core.model.PasswordResetRecord;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.plugin.Anything;
 import com.lovelymonkey.core.plugin.Plugin;
@@ -23,8 +25,9 @@ import com.lovelymonkey.core.plugin.emailnotificationplugin.EmailNotificationPlu
 import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.EmailBuilder;
 import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.ReceiverBuilder;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
-import com.lovelymonkey.core.utils.ControllerConstant;
+import com.lovelymonkey.core.utils.EmailTemplateUtils;
 import com.lovelymonkey.core.utils.RequestHandleConstant;
+import com.lovelymonkey.core.utils.constants.controller.LoginAndRegisterControlerConstants;
 
 /**
  * User info management controller.
@@ -53,7 +56,7 @@ public class LoginAndRegisterController {
     @RequestMapping(value = "/doLogin.htm", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String doLogin(final User u, final HttpSession httpSession) {
-        String now = Calendar.getInstance().toString();
+        String now = Calendar.getInstance().getTime().toString();
 
         log.info(String.format("User: [%s] login system at time [%s]",
                 u.getUserName(), now));
@@ -61,12 +64,15 @@ public class LoginAndRegisterController {
         boolean isUserExist = loginAndRegisterService.isUserExist(u);
 
         if (isUserExist) {
-            /* The User info provided by login matches record in storage. */
+            /* The User info provided by customer matches record in storage. */
             httpSession.setAttribute(RequestHandleConstant.UserManageStatus.CURRENT_USER, u);
         } else {
             /* The User provide wrong userName or password. */
-            httpSession.setAttribute(RequestHandleConstant.UserManageStatus.LOGIN_FAIL_TIME, 1);
-            return RequestHandleConstant.UserManageStatus.LOGIN_SYSTEM_FAILED;
+            int fails = httpSession.getAttribute(RequestHandleConstant.UserManageStatus.LOGIN_FAIL_TIME) == null ? 0 : Integer.valueOf(
+                    (String)httpSession.getAttribute(RequestHandleConstant.UserManageStatus.LOGIN_FAIL_TIME));
+            httpSession.setAttribute(RequestHandleConstant.UserManageStatus.LOGIN_FAIL_TIME, fails++);
+
+            return RequestHandleConstant.UserManageStatus.LOGIN_SYSTEM_FAILED + ":" + fails;
         }
 
         return RequestHandleConstant.UserManageStatus.LOGIN_SYSTEM_SUCCESS;
@@ -79,6 +85,7 @@ public class LoginAndRegisterController {
      * @return The correct page that user should visit determined by the input info provided by customer.
      */
     @RequestMapping(value = "/doRegister.htm", method = {RequestMethod.POST})
+    @ResponseBody
     public String doRegister(final User u, final HttpSession session) {
         log.info(String.format("Risgister user for userinfo [%s]", u.getUserName()));
 
@@ -94,7 +101,7 @@ public class LoginAndRegisterController {
         /* Default, customer level will be 1, normal customers */
         u.setLevel(1);
         loginAndRegisterService.updateOrSaveUser(u);
-        session.setAttribute(ControllerConstant.LoginAndRegisterControlerConstants.CURRENT_USER,
+        session.setAttribute(LoginAndRegisterControlerConstants.CURRENT_USER,
                 loginAndRegisterService.getUserByUserNameAndPSD(u.getUserName(), u.getPassWord()));
 
         return RequestHandleConstant.UserManageStatus.REGISTER_SYSTEM_SUCCESS;
@@ -128,15 +135,18 @@ public class LoginAndRegisterController {
 
         User user = loginAndRegisterService.getUserByEmail(email);
         if (user == null) {
-            return ControllerConstant.LoginAndRegisterControlerConstants.EMAIL_NOT_EXISTED;
+            return LoginAndRegisterControlerConstants.EMAIL_NOT_EXISTED;
         }
         Plugin emailSendPlugin = pluginManager.getPluginByName(EmailNotificationPlugin.PLUGIN_NAME);
         Anything link = new Anything();
+        String uuid = UUID.randomUUID().toString();
+        String emailBody = EmailTemplateUtils.generatePasswordResetEmail(user.getUserName(), uuid);
         Email mail = EmailBuilder.builder()
-                .subject(ControllerConstant.LoginAndRegisterControlerConstants.PASS_WORD_RESET_SUBJECT)
+                .subject(LoginAndRegisterControlerConstants.PASS_WORD_RESET_SUBJECT)
                 .receiver(ReceiverBuilder.builder()
                         .receiveAddress(user.getEmail())
                         .build())
+                .content(emailBody)
                 .build();
         link.setValue(mail);
         int count = 0;
@@ -155,6 +165,13 @@ public class LoginAndRegisterController {
             }
             return Boolean.FALSE.toString();
         }
+
+        PasswordResetRecord record = new PasswordResetRecord();
+        record.setRecordDate(Calendar.getInstance().getTime().toString());
+        record.setSignature(uuid);
+        record.setUserId(user.getId());
+        loginAndRegisterService.record(record);
+
         return Boolean.TRUE.toString();
     }
 
