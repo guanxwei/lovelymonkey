@@ -24,7 +24,7 @@ import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.service.LoadUserSpaceMenuService;
 import com.lovelymonkey.core.template.TemplateUtils;
 import com.lovelymonkey.core.utils.constants.controller.LoginAndRegisterControlerConstants;
-import com.lovelymonkey.core.widget.data.Input;
+import com.lovelymonkey.core.widget.data.WidgetInput;
 
 import lombok.NonNull;
 import lombok.Setter;
@@ -54,15 +54,15 @@ public class WidgetsManageController {
     /**
      * Load widget by widgetName.
      * @param widgetName widgetName.
-     * @param session http session instance.
-     * @param request http servlet request instance for exactly this customer request.
+     * @param session HTTP session instance.
+     * @param request HTTP servlet request instance for exactly this customer request.
      * @return the widget template file path, currently written by jsp.
      */
     @RequestMapping(value = "/{widgetName}")
     public String loadWidget(@RequestParam @NonNull final String widgetName, final HttpSession session, final HttpServletRequest request) {
 
         User user = (User) session.getAttribute(LoginAndRegisterControlerConstants.CURRENT_USER);
-        Input input = Input.builder()
+        WidgetInput input = WidgetInput.builder()
                 .method(request.getMethod())
                 .headers(extractHeaders(request))
                 .queryString(request.getQueryString())

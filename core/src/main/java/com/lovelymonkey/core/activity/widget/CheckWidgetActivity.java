@@ -10,7 +10,7 @@ import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.template.TemplateUtils;
 import com.lovelymonkey.core.widget.Widget;
 import com.lovelymonkey.core.widget.WidgetRegister;
-import com.lovelymonkey.core.widget.data.Input;
+import com.lovelymonkey.core.widget.data.WidgetInput;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +28,7 @@ public class CheckWidgetActivity extends Activity {
 
     @Override
     public ActivityResult act() {
-        Input input = (Input) WorkFlowContext.getPrimary().getValue();
+        WidgetInput input = (WidgetInput) WorkFlowContext.getPrimary().getValue();
         Resource returnPage;
 
         /* Check if the widget exists, if not direct customers to the default error page! */

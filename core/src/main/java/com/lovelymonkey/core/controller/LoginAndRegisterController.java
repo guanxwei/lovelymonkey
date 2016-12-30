@@ -3,6 +3,7 @@ package com.lovelymonkey.core.controller;
 import java.util.Calendar;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import lombok.Setter;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lovelymonkey.core.exceptions.LocaleException;
 import com.lovelymonkey.core.model.PasswordResetRecord;
 import com.lovelymonkey.core.model.User;
 import com.lovelymonkey.core.plugin.Anything;
@@ -26,6 +28,7 @@ import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.EmailBuilder
 import com.lovelymonkey.core.plugin.emailnotificationplugin.builder.ReceiverBuilder;
 import com.lovelymonkey.core.service.LoginAndRegisterService;
 import com.lovelymonkey.core.utils.EmailTemplateUtils;
+import com.lovelymonkey.core.utils.LocaleHelper;
 import com.lovelymonkey.core.utils.RequestHandleConstant;
 import com.lovelymonkey.core.utils.constants.controller.LoginAndRegisterControlerConstants;
 
@@ -130,7 +133,7 @@ public class LoginAndRegisterController {
      */
     @RequestMapping(value = "/passwordreset.htm", method = {RequestMethod.POST})
     @ResponseBody
-    public String sendPasswordResetLink(final String email) {
+    public String sendPasswordResetLink(final String email, final HttpServletRequest request) {
         log.info(String.format("Receive passWord reset request for :", email));
 
         User user = loginAndRegisterService.getUserByEmail(email);
@@ -141,13 +144,19 @@ public class LoginAndRegisterController {
         Anything link = new Anything();
         String uuid = UUID.randomUUID().toString();
         String emailBody = EmailTemplateUtils.generatePasswordResetEmail(user.getUserName(), uuid);
-        Email mail = EmailBuilder.builder()
-                .subject(LoginAndRegisterControlerConstants.PASS_WORD_RESET_SUBJECT)
-                .receiver(ReceiverBuilder.builder()
-                        .receiveAddress(user.getEmail())
-                        .build())
-                .content(emailBody)
-                .build();
+        Email mail = null;
+        try {
+            mail = EmailBuilder.builder()
+                    .subject(LocaleHelper.translate(LoginAndRegisterControlerConstants.PASS_WORD_RESET_SUBJECT, request.getLocale()))
+                    .receiver(ReceiverBuilder.builder()
+                            .receiveAddress(user.getEmail())
+                            .build())
+                    .content(emailBody)
+                    .build();
+        } catch (LocaleException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        }
         link.setValue(mail);
         int count = 0;
         try {

@@ -2,12 +2,14 @@ package com.lovelymonkey.core.widget;
 
 import java.util.List;
 
+import com.lovelymonkey.core.widget.data.WidgetInput;
+
 import lombok.Getter;
 
 /**
- * Base class represents web widget in a html page. Currently there are two kind of widgets: Menu, Item. The menu level widget
+ * Base class represents web widget in a HTML page. Currently there are two kind of widgets: Menu, Item. The menu level widget
  * will be treated as first level widget and contains some item level widgets. The menu level widgets will be shown in the web
- * pages as menus(like a button in html page), customers can click the menus to show the the child widgets in the same menu level
+ * pages as menus(like a button in HTML page), customers can click the menus to show the the child widgets in the same menu level
  * widget.
  * @author guanxwei
  *
@@ -50,6 +52,11 @@ public abstract class Widget {
     public int getWidgetAuthority() {
         return 1;
     }
+
+    /**
+     * Perform action on the widget.
+     */
+    public abstract void perform(WidgetInput inut);
 
     /**
      * Widget level.

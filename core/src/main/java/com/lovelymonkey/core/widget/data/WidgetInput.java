@@ -10,18 +10,18 @@ import lombok.Data;
 
 /**
  * Widget input holder.
- * Customers can send data to server via HTTP request, like a {@link RequestMethod#GET} request, customer
- * can transmit data through query String.
+ * Customers can send data to server via HTTP request, like a {@link RequestMethod#GET} request, additional information
+ * can be transfered by queryString or HTTP form data.
  *
- * To provide an unique model abstraction, once the server receive request from a font-end widget, the server
- * will wrap the HTTP request input including the request method, queryString, parameters, etc into an {@link Input}
+ * To provide an unique model abstraction, once the server receive request from the font-end widget, the server
+ * will wrap the HTTP request's information including the request method, queryString, parameters, etc into an {@link WidgetInput}
  * instance.
  * @author guanxwei
  *
  */
 @Data
 @Builder
-public class Input {
+public class WidgetInput {
 
     private String requestID;
     private String method;

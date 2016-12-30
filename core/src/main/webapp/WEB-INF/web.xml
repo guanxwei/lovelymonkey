@@ -17,7 +17,13 @@
       <param-value>classpath:applicationContext.xml</param-value>
   </context-param>
 
-<!-- add spring-mvc dispatcher -->  
+  <!-- other context configure values-->
+  <context-param>
+      <param-name>system.properties</param-name>
+      <param-value>system.properties</param-value>
+  </context-param>
+
+  <!-- add spring-mvc dispatcher -->  
   <servlet>
       <servlet-name>spring-mvc</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

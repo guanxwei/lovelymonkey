@@ -45,12 +45,12 @@ public class DashBoardController {
     //CHECKSTYLE:ON
 
     /**
-     * Load user level specific contents. Will first check if the customer has login in the system or not.
+     * Load user level specific contents. Will first check if the customer login or not.
      * If yes, will load the content according to the customer's user level. If not will load the default
      * contents that are granted to visitors.
-     * @param map model map used to store values so that jsp engine can use them to render the page.
-     * @param session http session instance.
-     * @return Dashboard jsp page.
+     * @param map Model map used to store values so that JSP engine can use them to render the page.
+     * @param session HTTP session instance.
+     * @return Dashboard JSP page.
      */
     @RequestMapping(method = {RequestMethod.GET}, value = "/show.htm")
     public String showDashBoard(final ModelMap map, final HttpSession session) {
